@@ -17,7 +17,7 @@
     </svg>
     '
     />
-    <title></title>
+    <title>GuessIt</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -32,39 +32,27 @@
     h-100 for a full height element  
     d-flex to create a flexbox container and transform direct children elements into flex items 
     flex-column to set a vertical direction-->
-    <div class="container-fluid h-100 d-flex flex-column">
       <!-- Header row : dark background, white text -->
-      <div class="row bg-dark py-2 header">
         <div class="col">
           <header class="text-center text-white font-weight-bold">
             <h4 id="headerTitle"></h4>
           </header>
         </div>
-      </div>
 
       <!-- Page content row. 
         flex-grow-1: Fill available space 
         mb-5 : to ensure that we see all of the content of the page row -->
-      <div class="row flex-grow-1 mb-5">
-        <div class="d-none d-md-block col-md bg-dark left"></div>
-        <div class="col col-md-10 mt-2">
-          <div id="navBar"></div>       
+      
           
           <h4 id="pageTitle"></h4>
 
           <div id="page"></div>
-        </div>
-        <div class="d-none d-md-block col-md bg-dark right"></div>
-      </div>
+
       <!-- Footer row -->
-      <div class="row bg-dark fixed-bottom footer">
         <div class="col">
           <footer class="py-2 text-center text-white font-weight-bold">
             <h5 id="footerText"></h5>
-            <div id="themeSelection"></div>
           </footer>
         </div>
-      </div>
-    </div>
    </body>
 </html>
