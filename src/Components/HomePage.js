@@ -1,24 +1,26 @@
 import { setLayout } from "../utils/render.js";
-let homePage = `<p>This frontend runs on Webpack and uses the Customizable Analog Clock npm package. 
-Furthermore, the frontend has a proxy that allows to redirect 
-the API requests.</p>
+let homePage = `<div id="firstPartHomePage">
+  <div id="secondPartHomePage">
+    <button class="buttonHP">Create Game</button>
+    <form>
+        <input
+          class="form-control"
+          type="text"
+          name="link"
+          id="link"
+          placeholder="Invitation Link"
+        />
+      <input class="buttonHP" type="submit" value="Join Game" />
+    </form>
+  </div>
+</div>
 `;
 
-import { AnalogClock } from 'customizable-analog-clock';
 
 const HomePage = async () => {
   setLayout("Home");
   let page = document.querySelector("#page");
-  page.innerHTML  = homePage + `<div class="d-flex justify-content-center">
-                      <div 
-                          id="my-clock"                          
-                          style="width: 200px; height: 200px;"                         
-                      </div>
-                        </div>`; 
-  const clock = new AnalogClock({
-    htmlElement : 'my-clock',
-    showIndicators: true,
-});
+  page.innerHTML = homePage;
  
 };
 
