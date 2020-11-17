@@ -6,19 +6,13 @@ body {
 a {
   color: #00B7FF;
 }
-
-/* CSS to deal with constraint validation styles */
-/*input:invalid {
-  border: 2px dashed red;
+#centerPage{
+  margin-left: 25%;
+  margin-right: 25%;
+  text-align: center;
 }
-
-input:valid {
-  border: 2px solid green;
-}*/
 #firstPartHomePage{
- background-color:grey;
- margin-left: 20%;
- margin-right: 20%;
+ background-color:rgb(90, 90, 90);
 }
 #secondPartHomePage{
   margin-left: 2%;
@@ -27,8 +21,9 @@ input:valid {
 .buttonHP{
   margin-top: 1%;
   margin-bottom: 1%;
-  background-color: rgb(0, 162, 255);
+  background-color: rgb(36, 196, 175);
   width: 100%;
   border-style: hidden;
   border-radius: 5px;
+  font-size: x-large;
 }
