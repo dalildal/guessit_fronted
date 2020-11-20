@@ -1,9 +1,10 @@
 //import { setLayout } from "../utils/render.js";
+import logo from "../images/guessItLogo.png";
 
 let homePage = `
 <div id="centerPage">
-  <img src="/images/guessItLogo.jpg" alt="logo GuessIt">
-  <h2>Guess It</h2>
+  <img id="logo" src="${logo}" alt="logo GuessIt">
+  <h1>Guess It</h1>
   <h4>Multiplayer game</h4>
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
