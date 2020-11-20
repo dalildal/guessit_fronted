@@ -2,7 +2,10 @@
 
 let createGamePage = `
 <div id="centerPage">
-  Page create Game
+  <h2>SETTINGS</h2>
+  <form>
+  <input type="number" class="form-control" id="nbPlayer" name="nbPlayer" min="2" max="10" placeholder="2-10">
+  </form>
 </div>
 `;
 
