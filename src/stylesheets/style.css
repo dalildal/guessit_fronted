@@ -1,16 +1,16 @@
 body {
   height: 100vh;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url('../images/background_image.png');
   background-size: 100% 100%;
-  
 }
-/*img{
-  background-image: url('D:\Cours\Bloc2\Q1\JavaScript\Projet\Code\guessit_backend\public\images\guessItLogo.jpg');
-}*/
 a {
   color: #00B7FF;
 }
-
+#logo{
+  width: 100%;
+  height: 100%;
+}
 #centerPage{
   margin-left: 25%;
   margin-right: 25%;
