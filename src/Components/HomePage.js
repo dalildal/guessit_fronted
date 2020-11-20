@@ -30,29 +30,8 @@ let page = document.querySelector("#page");
 
 const HomePage = async () => {
 
-  fetch("/api/images", {
-    method: "GET",
-  })
-  .then((response) => {
-    if (!response.ok)
-      throw new Error(
-        "Error code : " + response.status + " : " + response.statusText
-      );
-  })
-  .then((data) => onFilmList(data))
-  .catch((err) => onError(err));
-
   page.innerHTML = homePage;
 
 };
 
-const onFilmList = (data) => {
-  if (!data) return;
-  console.log("hey");
-  data.forEach((element) => {
-  page += `<img src=${element} alt="test">`;
-  });
-  page.innerHTML = homePage;
-
-}
 export default HomePage;
