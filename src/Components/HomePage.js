@@ -7,7 +7,9 @@ let homePage = `
   <h4>Multiplayer game</h4>
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
-      <button class="buttonHP" href="/createGame">Create Game</button>
+      <form action="/createGame">
+        <input class="buttonHP" type="submit" value="Create Game" />
+      </form>
       <form>
           <input
             class="form-control"
