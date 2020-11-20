@@ -1,24 +1,13 @@
 import HomePage from "./HomePage.js";
-import UserListPage from "./UserListPage.js";
-import LoginPage from "./LoginPage.js";
-import RegisterPage from "./RegisterPage.js";
-import LogoutComponent from "./LogoutComponent.js";
+import CreateGamePage from "./CreateGamePage.js";
 import ErrorPage from "./ErrorPage.js";
-import AddFilm from "./Film/AddFilm.js";
-import FilmListPage from "./Film/FilmListPage.js";
 
 const routes = {
   "/": HomePage,
-  "/users": UserListPage,
-  "/login": LoginPage,
-  "/register": RegisterPage,
-  "/logout": LogoutComponent,
+  "/createGame": CreateGamePage,
   "/error": ErrorPage,
-  "/films": FilmListPage,
-  "/films/add": AddFilm
 };
 
-let navBar = document.querySelector("#navBar");
 let componentToRender;
 
 // dictionnary of routes
@@ -35,6 +24,7 @@ const Router = () => {
   });
 
   /* manage click on the navBar*/
+  // Je pense que cette constante va être utile lorsqu'on créera une game
   const onNavigate = (e) => {
     let uri;
     if (e.target.tagName === "A") {
@@ -58,7 +48,6 @@ const Router = () => {
     }
   };
 
-  navBar.addEventListener("click", onNavigate);
 
   // Display the right component when the user use the browsing history
   window.addEventListener("popstate", () => {

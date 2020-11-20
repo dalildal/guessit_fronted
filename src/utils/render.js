@@ -9,8 +9,8 @@ function setLayout(pageTitle, headerTitle, footerText) {
   if (headerTitle)
     document.querySelector("#headerTitle").innerText = headerTitle;
   if (pageTitle) {
-    document.querySelector("title").innerText = pageTitle;
-    document.querySelector("#pageTitle").innerText = pageTitle;
+    //document.querySelector("title").innerText = pageTitle;
+    //document.querySelector("#pageTitle").innerText = pageTitle;
   }
   if (footerText) document.querySelector("#footerText").innerText = footerText;
 }
