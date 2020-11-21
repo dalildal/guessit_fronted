@@ -1,13 +1,16 @@
 //import { setLayout } from "../utils/render.js";
+import logo from "../images/guessItLogo.png";
 
 let homePage = `
 <div id="centerPage">
-  <img src="/images/guessItLogo.jpg" alt="logo GuessIt">
-  <h2>Guess It</h2>
+  <img id="logo" src="${logo}" alt="logo GuessIt">
+  <h1>Guess It</h1>
   <h4>Multiplayer game</h4>
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
-      <button class="buttonHP" href="/createGame">Create Game</button>
+      <form action="/createGame">
+        <input class="buttonHP" type="submit" value="Create Game" />
+      </form>
       <form>
           <input
             class="form-control"
@@ -27,29 +30,8 @@ let page = document.querySelector("#page");
 
 const HomePage = async () => {
 
-  fetch("/api/images", {
-    method: "GET",
-  })
-  .then((response) => {
-    if (!response.ok)
-      throw new Error(
-        "Error code : " + response.status + " : " + response.statusText
-      );
-  })
-  .then((data) => onFilmList(data))
-  .catch((err) => onError(err));
-
   page.innerHTML = homePage;
 
 };
 
-const onFilmList = (data) => {
-  if (!data) return;
-  console.log("hey");
-  data.forEach((element) => {
-  page += `<img src=${element} alt="test">`;
-  });
-  page.innerHTML = homePage;
-
-}
 export default HomePage;

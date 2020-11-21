@@ -1,10 +1,15 @@
 body {
   height: 100vh;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url('../images/background_image.png');
+  background-size: 100% 100%;
 }
-
 a {
   color: #00B7FF;
+}
+#logo{
+  width: 100%;
+  height: 100%;
 }
 #centerPage{
   margin-left: 25%;
@@ -26,4 +31,10 @@ a {
   border-style: hidden;
   border-radius: 5px;
   font-size: x-large;
+}
+h1{
+  color: black;
+}
+#label{
+  color: white;
 }
