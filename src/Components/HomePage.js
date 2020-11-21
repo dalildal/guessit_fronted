@@ -1,5 +1,6 @@
 //import { setLayout } from "../utils/render.js";
 import logo from "../images/guessItLogo.png";
+import { RedirectUrl } from "./Router.js";
 
 let homePage = `
 <div id="centerPage">
@@ -8,17 +9,11 @@ let homePage = `
   <h4>Multiplayer game</h4>
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
-      <form action="/createGame">
+      <form>
         <input class="buttonHP" type="submit" value="Create Game" />
       </form>
       <form>
-          <input
-            class="form-control"
-            type="text"
-            name="link"
-            id="link"
-            placeholder="Invitation Link"
-          />
+        <input class="form-control" type="text" name="link" id="link" placeholder="Invitation Link"/>
         <input class="buttonHP" type="submit" value="Join Game" />
       </form>
     </div>
@@ -32,6 +27,13 @@ const HomePage = async () => {
 
   page.innerHTML = homePage;
 
+  let createGameForm = document.querySelector("form");
+  createGameForm.addEventListener("submit", onSubmit);
 };
+
+const onSubmit = (e) => {
+  e.preventDefault();
+  RedirectUrl("/createGame");
+}
 
 export default HomePage;
