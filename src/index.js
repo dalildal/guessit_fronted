@@ -10,7 +10,6 @@ import 'bootstrap';
 //const HEADER_TITLE = "JavaScript & Node.js full course";
 //const FOOTER_TEXT = "Happy learning : )";
 
-
 Router();
 
 
