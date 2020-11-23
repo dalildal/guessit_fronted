@@ -2,6 +2,7 @@
 import logo from "../images/guessItLogo.png";
 
 let homePage = `
+
 <div id="centerPage">
   <img id="logo" src="${logo}" alt="logo GuessIt">
   <h1>Guess It</h1>
