@@ -1,12 +1,14 @@
 import HomePage from "./HomePage.js";
 import CreateGamePage from "./CreateGamePage.js";
 import WaitingRoomPage from "./WaitingRoomPage.js";
+import InGamePage from "./InGamePage.js";
 import ErrorPage from "./ErrorPage.js";
 
 const routes = {
   "/": HomePage,
   "/createGame": CreateGamePage,
   "/waitingRoom": WaitingRoomPage,
+  "/inGame": InGamePage,
   "/error": ErrorPage,
 };
 

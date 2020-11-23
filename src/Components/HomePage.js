@@ -9,13 +9,17 @@ let homePage = `
   <h4>Multiplayer game</h4>
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
-      <form>
-        <input class="buttonHP" type="submit" value="Create Game" />
-      </form>
-      <form>
-        <input class="form-control" type="text" name="link" id="link" placeholder="Invitation Link"/>
-        <input class="buttonHP" type="submit" value="Join Game" />
-      </form>
+      <div id="createGameForm">
+        <form>
+          <input class="buttonHP" type="submit" value="Create Game" />
+        </form>
+      </div>
+      <div id="joinGameForm">
+        <form>
+          <input class="form-control" type="text" name="link" id="link" placeholder="Invitation Link"/>
+          <input class="buttonHP" type="submit" value="Join Game" />
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -27,13 +31,20 @@ const HomePage = async () => {
 
   page.innerHTML = homePage;
 
-  let createGameForm = document.querySelector("form");
-  createGameForm.addEventListener("submit", onSubmit);
+  let createGameForm = document.getElementById("createGameForm");
+  createGameForm.addEventListener("submit", onCreateGame);
+  let joinGameForm = document.getElementsById("joinGameForm");
+  joinGameForm.addEventListener("submit", onJoinGame);
 };
 
-const onSubmit = (e) => {
+const onCreateGame = (e) => {
   e.preventDefault();
   RedirectUrl("/createGame");
+}
+
+const onJoinGame = (e) => {
+  e.preventDefault();
+  RedirectUrl("/waitingRoom");
 }
 
 export default HomePage;

@@ -53,7 +53,6 @@ const onCreateGame = (e) => {
 
 const onGameCreated = (data) => {
   console.log(data);
-  // re-render the navbar for the authenticated user  
   RedirectUrl("/waitingRoom");
 };
 
