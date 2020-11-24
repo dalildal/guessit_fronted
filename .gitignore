@@ -1,5 +1,2 @@
-<<<<<<< HEAD
 # ignore all node_modules folders and nested folders & files
-=======
->>>>>>> cba5cc5983708c6b42b18f3b2416a016e832ef55
 node_modules

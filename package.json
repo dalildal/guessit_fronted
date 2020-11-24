@@ -3,15 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production",
-    "start": "webpack-dev-server --mode development"
+    "dev": "nodemon ./bin/www",
+    "start": "webpack-dev-server --mode development",
+    "deve": "webpack --mode development",
+    "build": "webpack --mode production"
   },
   "dependencies": {
     "bootstrap": "^4.5.2",
     "customizable-analog-clock": "^1.0.1",
     "jquery": "^3.5.1",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "socket.io": "^3.0.3",
+    "socket.io-client": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.11.4",

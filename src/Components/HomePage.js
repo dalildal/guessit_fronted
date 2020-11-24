@@ -8,6 +8,16 @@ let homePage = `
   <h4>Multiplayer game</h4>
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
+    <form>
+          <input
+            class="form-control"
+            type="text"
+            name="pseudo"
+            id="pseudo"
+            placeholder="Pseeudo"
+          />
+          <input class="buttonHP" type="submit" value="Create pseudo"/>
+    </form>
       <form action="/createGame">
         <input class="buttonHP" type="submit" value="Create Game" />
       </form>
