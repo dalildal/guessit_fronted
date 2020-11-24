@@ -34,8 +34,8 @@ const HomePage = async () => {
 
   let createGameForm = document.getElementById("createGameForm");
   createGameForm.addEventListener("submit", onCreateGame);
-  let joinGameForm = document.getElementsById("joinGameForm");
-  joinGameForm.addEventListener("submit", onJoinGame);
+  //let joinGameForm = document.getElementsById("joinGameForm");
+  //joinGameForm.addEventListener("submit", onJoinGame);
 };
 
 const onCreateGame = (e) => {
