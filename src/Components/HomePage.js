@@ -2,6 +2,7 @@
 import logo from "../images/guessItLogo.png";
 import { RedirectUrl } from "./Router.js";
 
+
 let homePage = `
 <div id="centerPage">
   <img id="logo" src="${logo}" alt="logo GuessIt">
@@ -10,7 +11,8 @@ let homePage = `
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
       <div id="createGameForm">
-        <form>
+        <form action="/chatRoom">
+          <input class="form-control" type="text" name="pseudo" id="pseudo" placeholder="pseudo"/>
           <input class="buttonHP" type="submit" value="Create Game" />
         </form>
       </div>
@@ -31,8 +33,8 @@ const HomePage = async () => {
 
   page.innerHTML = homePage;
 
-  let createGameForm = document.getElementById("createGameForm");
-  createGameForm.addEventListener("submit", onCreateGame);
+  // let createGameForm = document.getElementById("createGameForm");
+  // createGameForm.addEventListener("submit", onCreateGame);
   //let joinGameForm = document.getElementsById("joinGameForm");
   //joinGameForm.addEventListener("submit", onJoinGame);
 };
@@ -46,5 +48,7 @@ const onJoinGame = (e) => {
   e.preventDefault();
   RedirectUrl("/waitingRoom");
 }
+
+
 
 export default HomePage;

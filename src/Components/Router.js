@@ -3,6 +3,7 @@ import CreateGamePage from "./CreateGamePage.js";
 import WaitingRoomPage from "./WaitingRoomPage.js";
 import InGamePage from "./InGamePage.js";
 import ErrorPage from "./ErrorPage.js";
+import ChatRoomPage from "./ChatRoomPage.js";
 
 const routes = {
   "/": HomePage,
@@ -10,6 +11,7 @@ const routes = {
   "/waitingRoom": WaitingRoomPage,
   "/inGame": InGamePage,
   "/error": ErrorPage,
+  "/chatRoom": ChatRoomPage,
 };
 
 let componentToRender;

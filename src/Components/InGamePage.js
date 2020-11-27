@@ -1,3 +1,4 @@
+
 import { RedirectUrl } from "./Router.js";
 import randomImage from "../images/1.png";
 
