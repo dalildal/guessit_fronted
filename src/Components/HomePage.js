@@ -12,7 +12,7 @@ let homePage = `
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
       <div id="createGameForm">
-        <form action="/chatRoom">
+        <form action="/createGame">
           <input class="form-control" type="text" name="pseudo" id="pseudo" placeholder="pseudo"/>
           <input class="buttonHP" type="submit" value="Create Game" />
         </form>
