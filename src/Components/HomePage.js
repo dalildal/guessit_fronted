@@ -4,6 +4,7 @@ import { RedirectUrl } from "./Router.js";
 
 
 let homePage = `
+
 <div id="centerPage">
   <img id="logo" src="${logo}" alt="logo GuessIt">
   <h1>Guess It</h1>

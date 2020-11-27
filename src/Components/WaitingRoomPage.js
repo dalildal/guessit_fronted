@@ -1,6 +1,8 @@
 import { RedirectUrl } from "./Router.js";
+import * as io from 'socket.io-client';
 
 let page = document.querySelector("#page");
+
 
 const WaitingRoomPage = () => {
 
@@ -55,16 +57,20 @@ const onGameSettings = (data) => {
   
   let launchGameForm = document.querySelector("form");
   launchGameForm.addEventListener("submit", onLaunchGame);
-  };
+};
 
-  const onError = (err) => {
-    let errorMessage = err.message;
-    RedirectUrl("/error", errorMessage);
-  };
+const onError = (err) => {
+  let errorMessage = err.message;
+  RedirectUrl("/error", errorMessage);
+};
 
-  const onLaunchGame = (e) => {
-    e.preventDefault();
-    RedirectUrl("/inGame");
-  }
+const onLaunchGame = (e) => {
+  e.preventDefault();
+  RedirectUrl("/inGame");
+}
+
+
+
+
 
 export default WaitingRoomPage;

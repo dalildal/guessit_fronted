@@ -2,7 +2,6 @@
 import { RedirectUrl } from "./Router.js";
 import randomImage from "../images/1.png";
 
-
 let pathDirectoryRandomImage = "../images/";
 
 let inGamePage = `
@@ -49,5 +48,6 @@ const onGetImage= (data) => {
     let errorMessage = err.message;
     RedirectUrl("/error", errorMessage);
   };
+  
 
 export default InGamePage;
