@@ -17,29 +17,12 @@ let createGamePage = `
 `;
 
 const CreateGamePage = () => {
-<<<<<<< HEAD
   
-=======
-  const game = io('localhost:3000'); // Open a socket with the server listening on port 3000
->>>>>>> ac57e2bf925ac91c93decfa00a4d4ad5946587fb
   let page = document.querySelector("#page");
   page.innerHTML = createGamePage;
   let gameForm = document.querySelector("form");
   gameForm.addEventListener("submit", onCreateGame);
-<<<<<<< HEAD
   
-=======
-
-  game.on('connect', () => { // Quand la connexion est établie
-    console.log('Socket Client ID:' + game.id); // 'G5p5...'
-    console.log('Socket Connection Established');
-  });
-  
-  game.on('broadcast', (arg) => {
-    console.log('From socket server, broadcast:' + arg);
-  });
-
->>>>>>> ac57e2bf925ac91c93decfa00a4d4ad5946587fb
 };
 
 const onCreateGame = (e) => {
