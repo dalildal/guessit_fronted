@@ -1,3 +1,4 @@
+import * as io from 'socket.io-client';
 import { RedirectUrl } from "./Router.js";
 
 let createGamePage = `
@@ -17,11 +18,20 @@ let createGamePage = `
 
 
 const CreateGamePage = () => {
-
+  const game = io('localhost:3000'); // Open a socket with the server listening on port 3000
   let page = document.querySelector("#page");
   page.innerHTML = createGamePage;
   let gameForm = document.querySelector("form");
   gameForm.addEventListener("submit", onCreateGame);
+
+  game.on('connect', () => { // Quand la connexion est établie
+    console.log('Socket Client ID:' + game.id); // 'G5p5...'
+    console.log('Socket Connection Established');
+  });
+  
+  game.on('broadcast', (arg) => {
+    console.log('From socket server, broadcast:' + arg);
+  });
 
 };
 
@@ -60,6 +70,7 @@ const onError = (err) => {
   let errorMessage = err.message;
   RedirectUrl("/error", errorMessage);
 };
+
 
 
 export default CreateGamePage;

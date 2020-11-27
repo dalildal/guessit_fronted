@@ -8,19 +8,25 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 
 //import {​​​​​​​​io}​​​​​​​​ from 'socket.io-client'; Code de Collinet
-import * as io from 'socket.io-client';
+
+//import * as io from 'socket.io-client';
  
-const socket = io('localhost:3000'); // Open a socket with the server listening on port 3000
- 
+//const socket = io('localhost:3000'); // Open a socket with the server listening on port 3000
+/*
 socket.on('connect', () => { // Quand la connexion est établie
     console.log('Socket Client ID:' + socket.id); // 'G5p5...'
     console.log('Socket Connection Established');
 });
+
+socket.on('message', message =>{
+    console.log(message);
+});
  
+
 socket.on('broadcast', (arg) => {
     console.log('From socket server, broadcast:' + arg);
 });
-
+*/
 //const HEADER_TITLE = "JavaScript & Node.js full course";
 //const FOOTER_TEXT = "Happy learning : )";
 
