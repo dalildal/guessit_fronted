@@ -1,8 +1,16 @@
 import { RedirectUrl } from "./Router.js";
+import * as io from 'socket.io-client';
 
 let page = document.querySelector("#page");
 
 const WaitingRoomPage = () => {
+
+const socket = io('localhost:3000');
+
+socket.on('connect', () => { // Quand la connexion est établie
+  console.log('Socket Client ID:' + socket.id); // 'G5p5...'
+  console.log('Hello this is a test');
+});
 
   fetch("/api/games", {
     method: "GET",
@@ -52,6 +60,9 @@ const onGameSettings = (data) => {
     </form>
   </div>`;
   page.innerHTML = table;
+  
+  page.innerHTML += `<h1 id="centerPage">PLAYERS</h1>`;
+
   
   let launchGameForm = document.querySelector("form");
   launchGameForm.addEventListener("submit", onLaunchGame);

@@ -1,4 +1,3 @@
-//import { setLayout } from "../utils/render.js";
 import logo from "../images/guessItLogo.png";
 import { RedirectUrl } from "./Router.js";
 
@@ -33,8 +32,8 @@ const HomePage = async () => {
 
   let createGameForm = document.getElementById("createGameForm");
   createGameForm.addEventListener("submit", onCreateGame);
-  //let joinGameForm = document.getElementsById("joinGameForm");
-  //joinGameForm.addEventListener("submit", onJoinGame);
+  let joinGameForm = document.getElementById("joinGameForm");
+  joinGameForm.addEventListener("submit", onJoinGame);
 };
 
 const onCreateGame = (e) => {
