@@ -24,6 +24,17 @@ a {
   margin-right: 2%;
 }
 .buttonHP{
+  color: black;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  background-color: rgb(36, 196, 175);
+  width: 100%;
+  border-style: hidden;
+  border-radius: 5px;
+  font-size: x-large;
+}
+.buttonJoin{
+  color: black;
   margin-top: 1%;
   margin-bottom: 1%;
   background-color: rgb(36, 196, 175);
@@ -37,8 +48,21 @@ a {
   margin-top: 5%;
 }
 h1{
-  color: black;
+  color:black;
+  font-style: normal;
+  font-weight: 100%;
 }
 #label{
   color: white;
+}
+
+.container{
+  width: 700px;
+}
+.squares {
+  width: 100px;
+  height: 100px;
+  margin: 2px;
+  background: linear-gradient(70deg, #4682B4,#24c4af);
+  display: inline-block;
 }

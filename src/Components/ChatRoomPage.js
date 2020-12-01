@@ -46,6 +46,7 @@ socket.on('connect', () => { // Quand la connexion est établie
 });
 
 //message From server
+/*
 socket.on('message', msg => {
     console.log(msg);
     outputMessage(msg); 
@@ -54,7 +55,7 @@ socket.on('message', msg => {
 socket.on('broadcast', (arg) => {
     console.log('From socket server, broadcast:' + arg);
 });
-
+*/
 function outputMessage(mess){
     const div = document.createElement('div');
     div.classList.add('message');
