@@ -32,13 +32,13 @@ const onGameSettings = (data) => {
   if (!data) return;
   let table = `
   <div id="tableSettings" class="table-responsive mt-3">
-  <h1 id="centerPage">SETTINGS<h1>
+  <h1 id="centerPage">PARAMETRES<h1>
   <table class="table">
       <thead>
           <tr>
-              <th scope="col">nbPlayer</th>
-              <th scope="col">Round time</th>
-              <th scope="col">nbRound</th>
+              <th scope="col">Nombre de joueurs</th>
+              <th scope="col">Limite de temps par round</th>
+              <th scope="col">Nombre de round</th>
           </tr>
       </thead>
   <tbody>`;
@@ -56,12 +56,12 @@ const onGameSettings = (data) => {
   </div>
   <div id="centerPage">
     <form>
-      <input class="buttonHP" type="submit" value="Launch Game" />
+      <input class="buttonHP" type="submit" value="Lancer la partie" />
     </form>
   </div>`;
   page.innerHTML = table;
   
-  page.innerHTML += `<h1 id="centerPage">PLAYERS</h1>`;
+  page.innerHTML += `<h1 id="centerPage">JOUEURS</h1>`;
 
   
   let launchGameForm = document.querySelector("form");

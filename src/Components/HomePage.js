@@ -15,19 +15,19 @@ let homePage = `
     <div class="squares"></div>
   </div>
   <h1>GUESS IT</h1>
-  <h4>Multiplayer game</h4>
+  <h4>Jeu multijoueur</h4>
   <div id="firstPartHomePage">
     <div id="secondPartHomePage">
       <div id="createGameForm">
-        <form action="/createGame">
+        <form>
           <input class="form-control" type="text" name="pseudo" id="pseudo" placeholder="pseudo"/>
-          <input class="buttonHP" type="submit" value="Create Game" />
+          <input class="buttonHP" type="submit" value="Créer une partie" />
         </form>
       </div>
       <div id="joinGameForm">
         <form>
-          <input class="form-control" type="text" name="link" id="link" placeholder="Invitation Link"/>
-          <input class="buttonJoin" type="submit" value="Join Game" />
+          <input class="form-control" type="text" name="link" id="link" placeholder="Lien d'invitation"/>
+          <input class="buttonJoin" type="submit" value="Rejoindre partie" />
         </form>
       </div>
     </div>

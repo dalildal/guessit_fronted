@@ -19,7 +19,7 @@ let inGamePage = `
 <div id="centerPage">
   <img id="logo2" src="${logo}" alt="logo GuessIt">
   <h1>Guess It</h1>
-  <h4>Multiplayer game</h4>
+  <h4>Jeu multijoueur</h4>
     <div id="firstSquare">
       <div id="secondSquare">
         <div id="timer"></div>
@@ -116,8 +116,8 @@ const onGetImage = (data) => {
 const onCheckAnswer = (data) => {
   document.getElementById("answerForm").innerHTML =`
   <form>
-    <input class="form-control" type="text" name="answer" id="answer" placeholder="Enter answer" autocomplete="off"/>
-    <input class="buttonHP" type="submit" value="Submit answer" />
+    <input class="form-control" type="text" name="answer" id="answer" placeholder="Entrez la réponse" autocomplete="off"/>
+    <input class="buttonHP" type="submit" value="Envoyer" />
   </form>`;
 
   document.getElementById("answer").focus();//Pour que le curseur aille directement dans le formulaire
@@ -128,7 +128,7 @@ const onCheckAnswer = (data) => {
     let answer = answerForm.elements[0].value;
       
     if(answer === data.wordToFind){
-      document.getElementById("state").innerHTML = `<h1 style="color:green">Right answer !</h1>`;
+      document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
       console.log("Bien joué le mot était", data.wordToFind);
       actualRound++;
       correctAnswers++;
@@ -136,7 +136,7 @@ const onCheckAnswer = (data) => {
       //onCallGame();
     }else{
       answerForm.elements[0].value = ``; //Reset l'input lorsque l'utilisateur à entre une mauvaise rep
-      document.getElementById("state").innerHTML = `<h1 style="color:red">Wrong answer !</h1>`;
+      document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
     }
     console.log("Réponse : " + answer);
   });
@@ -152,11 +152,11 @@ const onEndGame = (nbRound) => {
   `<div id="centerPage">
     <img id="logo2" src="${logo}" alt="logo GuessIt">
     <h1>Guess It</h1>
-    <h4>Multiplayer game</h4>
+    <h4>Jeu multijoueur</h4>
     <div id="firstSquare">
       <div id="secondSquare">
-        <h1>Game Finished</h1>
-        <h1>${correctAnswers}/${nbRound} Correct answers</h1>
+        <h1>Partie terminée</h1>
+        <h1>${correctAnswers}/${nbRound} réponses correctes </h1>
       </div><!-- div id=secondSquare -->    
     </div><!-- div id=firstSquare -->
   </div><!-- div id=centerPage -->`;0
