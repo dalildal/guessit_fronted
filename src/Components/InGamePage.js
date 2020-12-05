@@ -34,6 +34,7 @@ let chatRoomPage = `
       <ul id="users"></ul>
     </div>
     <div id="centerPage">
+    <div id="waiting"></div>
     <div id="firstSquare">
     <div id="secondSquare">
       <div id="timer"></div>
@@ -82,6 +83,7 @@ let imagesAlreadyDisplayed = new Array();
 let correctAnswers = 0;
 let endGamePage;
 let isGameFinished = false;
+let startGame = false;
 
 const socket = io('http://localhost:3000');
 
@@ -92,12 +94,9 @@ const InGamePage = () => {
   let chatForm = document.getElementById('chat-form');
   chatForm.addEventListener('submit', onSubmitMess);
 
-  let startGame = true;
-  if(startGame){
     //page.innerHTML = inGamePage;
     onCallGame();
-  }
-
+  
 
 };
 
@@ -118,10 +117,7 @@ const onSubmitMess = (e) =>{
 //user join room
 socket.emit('joinRoom',{pseudo});
 
-// show the userList
-socket.on('userList' , ({users}) =>{
-  outputList(users);
-})
+
 
 //socket client
 socket.on('connect', () => { // Quand la connexion est établie
@@ -140,28 +136,74 @@ function outputMessage(mess){
   div.classList.add('message');
   div.innerHTML = `<p class="text">
   <span class="meta">${mess.username} : </span>
-  ${mess.text}</p>`
+  ${mess.text}</p>`;
   
   document.querySelector('.chat-messages').appendChild(div);                
 }
 
-function outputList(users){
-  const userList = document.getElementById('users');
-  console.log("liste users :",users);
-  userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
-}
 
 
 
 
+const onGameSettings2 = (data) => {
+  if (!data) return;
 
+  // show the userList
+  socket.on('userList' , ({users}) =>{
+    outputList(users,data.nbPlayer);//On récupère le nombre de joueurs
+  })
 
+  let outputList = (users,nbPlayer) => {
+    const userList = document.getElementById('users');
+    console.log("liste users :",users);
+    console.log("nbr users :",users.length);
+    console.log("nbr players :",nbPlayer);
+    document.getElementById('waiting').innerHTML = `
+    <h1>Waiting for players</h1>
+    <h1>${users.length}/${nbPlayer}</h1>`;
+    if(users.length == nbPlayer){ //Si assez de joueurs on lance la game
+      startGame = true;
+      document.getElementById('waiting').innerHTML = ``;
+      console.log("La partie peut commencer");
+    } 
+    userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
+  }
 
+  if(startGame){
+    document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
+    clearInterval(myVarForTimer);//Je clear l'interval pour éviter qu'il y ait 2 timers lorsqu'une réponse est correcte
+    myVarForTimer = setInterval(myTimer, 1000);
 
+    let nbRound = data.nbRound;
+    document.getElementById("round").innerHTML = `<h1>Round : ${actualRound}/${nbRound}</h1>`;
 
+    let timer = data.roundTime;
+    document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`;//Je le mets avant la fonction pour qu'il soit mis dans l'html
+    function myTimer() { //Fonction pour actualiser le timer à chaque seconde
+      document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`; 
+      timer--;
+      if(timer < 0){ //Si le timer est écoulé
+        onCallGame();
+        actualRound++;
+        console.log("Temps écoulé");
+        clearInterval(myVarForTimer);
+      }
+    }
 
+    if(actualRound > nbRound){ //Si la partie est finie
+      isGameFinished = true;
+      onEndGame(data.nbRound);
+      console.log("gameIsFinished");
+      clearInterval(myVarForTimer);
+      page.innerHTML = endGamePage;
+    }else { //Sinon on continue
+      onCallImage();
+    }
 
-
+  } else { //Sinon on attend que plus de joueurs joignent
+    onCallGame();
+  }
+};
 
 
 
@@ -193,6 +235,42 @@ const onGameSettings = (data) => {
     }
   }
   onCallImage();
+};
+
+const onGetImage2 = (data) => {
+  if (!data) return;
+  //Sert à savoir si une id a déjà été utilisée
+  //Fonctionne mais ca serait mieux de gérer ça dans le backend(Mais c'est plus compliqué)
+  if(imagesAlreadyDisplayed.includes(data.id)){
+    console.log("Image déjà affichée :",data.wordToFind);
+    onCallImage();
+  }
+  else{
+    document.getElementById("image").innerHTML = `<img style="width:50%" id="displayedImage" src="${imagesToDisplay[data.id-1]}" alt="${data.id}">`;
+    imagesAlreadyDisplayed.push(data.id);
+    
+    //Gère le zoom et le dezoom de l'image
+    //Serait mieux de gérer ça en dehors de la const onGetImage()
+    document.getElementById("displayedImage").addEventListener('mouseleave', () =>{
+      document.getElementById("displayedImage").style.width = "50%";
+      console.log("Dezoom");
+    });
+    document.getElementById("displayedImage").addEventListener('mouseenter', () =>{
+      document.getElementById("displayedImage").style.width = "70%";
+      console.log("Zoom");
+    });
+
+    let bottomDash = `<h1><span>`;  
+    for(let i=0; i<data.wordToFind.length; i++){
+      bottomDash += ` _ `;
+    }
+    bottomDash += `</span></h1>`;
+
+    document.getElementById("bottomDash").innerHTML = bottomDash;
+
+    //onCheckAnswer(data);
+    onCheckAnswer2(data);
+  }
 };
 
 //Récupère l'image à afficher via un appel API mis dans la const onCallImage()
@@ -228,19 +306,13 @@ const onGetImage = (data) => {
     document.getElementById("bottomDash").innerHTML = bottomDash;
 
     onCheckAnswer(data);
-    onCheckAnswer2(data);
+    onCheckAnswer(data);
   }
 };
 
 const onCheckAnswer2 = (data) => {
   //Partie Socket
       //message From server
-      document.getElementsByClassName("chat-form-container").innerHTML = `
-      <form id="chat-form">
-        <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off"/>
-        <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
-      </form>`
-
       socket.on('message', msg => {
         console.log("Message : ",msg);
         if(msg.text === data.wordToFind && msg.username === pseudo){
@@ -255,7 +327,7 @@ const onCheckAnswer2 = (data) => {
           document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
         }
         outputMessage(msg); 
-      })  
+      })
 }
 
 
@@ -271,7 +343,7 @@ const onCheckAnswer = (data) => {
   answerForm.addEventListener("submit",(event) =>{
     event.preventDefault();
     let answer = answerForm.elements[0].value;
-    
+
     if(answer === data.wordToFind){
       document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
       console.log("Bien joué le mot était", data.wordToFind);
@@ -325,7 +397,7 @@ const onCallGame = () => {
         );
       return response.json();
     })
-    .then((data) => onGameSettings(data))
+    .then((data) => onGameSettings2(data))
     .catch((err) => onError(err));
 }
 
@@ -342,7 +414,7 @@ const onCallImage = () => {
         );
       return response.json();
     })
-    .then((data) => onGetImage(data))
+    .then((data) => onGetImage2(data))
     .catch((err) => onError(err));
 }
 
