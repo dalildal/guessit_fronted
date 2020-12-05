@@ -21,7 +21,6 @@ let homePage = `
     <div id="secondPartHomePage">
       <div id="createGameForm">
         <form>
-          <input class="form-control" type="text" name="pseudo" id="pseudo" placeholder="pseudo"/>
           <input class="buttonHP" type="submit" value="Créer une partie" />
         </form>
       </div>
