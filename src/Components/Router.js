@@ -2,6 +2,7 @@ import HomePage from "./HomePage.js";
 import CreateGamePage from "./CreateGamePage.js";
 import WaitingRoomPage from "./WaitingRoomPage.js";
 import InGamePage from "./InGamePage.js";
+import ChatRoomPage from "./ChatRoomPage.js";
 import ErrorPage from "./ErrorPage.js";
 import ChatRoomPage from "./ChatRoomPage.js";
 
@@ -10,6 +11,7 @@ const routes = {
   "/createGame": CreateGamePage,
   "/waitingRoom": WaitingRoomPage,
   "/inGame": InGamePage,
+  "/chatRoom": ChatRoomPage,
   "/error": ErrorPage,
   "/chatRoom": ChatRoomPage,
 };
