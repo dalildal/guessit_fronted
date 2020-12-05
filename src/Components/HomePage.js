@@ -30,6 +30,12 @@ let homePage = `
           <input class="buttonJoin" type="submit" value="Rejoindre partie" />
         </form>
       </div>
+      <div id="joinChatRoom">
+      <form action="/inGame">
+        <input class="form-control" required type="text" name="pseudo" id="pseudo" placeholder="pseudo"/>
+        <input class="buttonHP" type="submit" value="Join Chat Room" />
+      </form>
+    </div>
     </div>
   </div>
 </div>

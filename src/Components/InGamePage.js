@@ -1,5 +1,7 @@
 import { RedirectUrl } from "./Router.js";
 import logo from "../images/guessItLogo.png";
+import * as io from 'socket.io-client';
+import * as qs from 'qs';
 import p1 from "../images/1.jpg";
 import p2 from "../images/2.jpg";
 import p3 from "../images/3.jpg";
@@ -13,6 +15,46 @@ import p10 from "../images/10.jpg";
 import p11 from "../images/11.jpg";
 import p12 from "../images/12.jpg";
 import p13 from "../images/13.jpg";
+
+const { pseudo } = qs.parse(location.search, {
+  ignoreQueryPrefix: true
+});
+
+let chatRoomPage = `
+<div class="chat-container">
+  <header class="chat-header">
+    <h1><i class="fas fa-smile"></i> GuessIt</h1>
+    <a href="index.html" class="btn">Leave Room</a>
+  </header>
+  <main class="chat-main">
+    <div class="chat-sidebar">
+      <h3><i class="fas fa-comments"></i> Room Name:</h3>
+      <h2 id="room-name">JavaScript</h2>
+      <h3><i class="fas fa-users"></i> Users</h3>
+      <ul id="users"></ul>
+    </div>
+    <div id="centerPage">
+    <div id="firstSquare">
+    <div id="secondSquare">
+      <div id="timer"></div>
+      <div id="round"></div>
+      <div id="image"></div>
+      <div id="bottomDash"></div>
+      <div id="state"></div>
+      <div id="answerForm"></div>
+    </div><!-- div id=secondSquare -->    
+  </div><!-- div id=firstSquare -->
+  </div><!-- div id=centerPage -->
+    <div class="chat-messages"></div>
+  </main>
+  <div class="chat-form-container">
+    <form id="chat-form">
+      <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off"/>
+      <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+    </form>
+  </div>
+</div>`;
+
 
 
 let inGamePage = `
@@ -41,12 +83,88 @@ let correctAnswers = 0;
 let endGamePage;
 let isGameFinished = false;
 
+const socket = io('http://localhost:3000');
+
 const InGamePage = () => {
-  page.innerHTML = inGamePage;
   
-  onCallGame();
+  page.innerHTML = chatRoomPage;
+
+  let chatForm = document.getElementById('chat-form');
+  chatForm.addEventListener('submit', onSubmitMess);
+
+  let startGame = true;
+  if(startGame){
+    //page.innerHTML = inGamePage;
+    onCallGame();
+  }
+
 
 };
+
+
+
+
+const onSubmitMess = (e) =>{
+  e.preventDefault()
+  const message = e.target.elements.msg.value;
+  
+  //emit message to server
+  socket.emit('chat-message',message);
+  
+  //clear input
+  e.target.elements.msg.value = '';
+}
+
+//user join room
+socket.emit('joinRoom',{pseudo});
+
+// show the userList
+socket.on('userList' , ({users}) =>{
+  outputList(users);
+})
+
+//socket client
+socket.on('connect', () => { // Quand la connexion est établie
+  console.log('Socket Client ID:' + socket.id); // 'G5p5...'
+  console.log('Socket Connection Established');
+  socket.emit(socket.id);
+});
+
+socket.on('broadcast', arg => {
+  console.log('From socket server, broadcast:' + arg);
+  outputMessage(arg);
+});
+
+function outputMessage(mess){
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.innerHTML = `<p class="text">
+  <span class="meta">${mess.username} : </span>
+  ${mess.text}</p>`
+  
+  document.querySelector('.chat-messages').appendChild(div);                
+}
+
+function outputList(users){
+  const userList = document.getElementById('users');
+  console.log("liste users :",users);
+  userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const onGameSettings = (data) => {
   if (!data) return;
@@ -110,8 +228,36 @@ const onGetImage = (data) => {
     document.getElementById("bottomDash").innerHTML = bottomDash;
 
     onCheckAnswer(data);
+    onCheckAnswer2(data);
   }
 };
+
+const onCheckAnswer2 = (data) => {
+  //Partie Socket
+      //message From server
+      document.getElementsByClassName("chat-form-container").innerHTML = `
+      <form id="chat-form">
+        <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off"/>
+        <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+      </form>`
+
+      socket.on('message', msg => {
+        console.log("Message : ",msg);
+        if(msg.text === data.wordToFind && msg.username === pseudo){
+          console.log("Bonne réponse");
+          document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
+          console.log("Bien joué le mot était", data.wordToFind);
+          actualRound++;
+          correctAnswers++;
+          setTimeout(onCallGame,1000); //Pour afficher pdt 1 sec qu'on a trouvé la bonne rep
+        } else if (msg.text !== data.wordToFind && msg.username === pseudo) {
+          console.log("Mauvaise réponse");
+          document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
+        }
+        outputMessage(msg); 
+      })  
+}
+
 
 const onCheckAnswer = (data) => {
   document.getElementById("answerForm").innerHTML =`
@@ -122,11 +268,10 @@ const onCheckAnswer = (data) => {
 
   document.getElementById("answer").focus();//Pour que le curseur aille directement dans le formulaire
   let answerForm = document.querySelector("form");
-
   answerForm.addEventListener("submit",(event) =>{
     event.preventDefault();
     let answer = answerForm.elements[0].value;
-      
+    
     if(answer === data.wordToFind){
       document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
       console.log("Bien joué le mot était", data.wordToFind);
@@ -159,7 +304,7 @@ const onEndGame = (nbRound) => {
         <h1>${correctAnswers}/${nbRound} réponses correctes </h1>
       </div><!-- div id=secondSquare -->    
     </div><!-- div id=firstSquare -->
-  </div><!-- div id=centerPage -->`;0
+  </div><!-- div id=centerPage -->`;
 }
 
 const onError = (err) => {
