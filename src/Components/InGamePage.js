@@ -16,6 +16,7 @@ import p11 from "../images/11.jpg";
 import p12 from "../images/12.jpg";
 import p13 from "../images/13.jpg";
 
+//récupère le pseudo dans l'url
 const { pseudo } = qs.parse(location.search, {
   ignoreQueryPrefix: true
 });
@@ -141,6 +142,10 @@ function outputMessage(mess){
   document.querySelector('.chat-messages').appendChild(div);                
 }
 
+let outputList = (users) => {
+  const userList = document.getElementById('users');
+  userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
+}
 
 
 
@@ -148,30 +153,25 @@ function outputMessage(mess){
 const onGameSettings2 = (data) => {
   if (!data) return;
 
-  let outputList = (users,nbPlayer) => {
-    const userList = document.getElementById('users');
-    console.log("liste users :",users);
-    console.log("nbr users :",users.length);
-    console.log("nbr players :",nbPlayer);
-    document.getElementById('waiting').innerHTML = `
-    <h1>Waiting for players</h1>
-    <h1>${users.length}/${nbPlayer}</h1>`;
-    if(users.length == nbPlayer){ //Si assez de joueurs on lance la game
-      startGame = true;
-      document.getElementById('waiting').innerHTML = ``;
-      console.log("La partie peut commencer");
-      onCallGame();
-    } 
-    userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
-  }
-
   // show the userList
-  socket.on('userList' , ({users}) =>{
-    outputList(users,data.nbPlayer);//On récupère le nombre de joueurs
-  })
-
-  
-  if(startGame){
+  //Gère la waiting room
+  if(!startGame){
+    socket.on('userList' , ({users}) =>{
+      console.log("liste users :",users);
+      console.log("nbr users :",users.length);
+      console.log("nbr players :",data.nbPlayer);
+      document.getElementById('waiting').innerHTML = `
+      <h1>En attente d'autres joueurs</h1>
+      <h1>${users.length}/${data.nbPlayer}</h1>`;
+      if(users.length == data.nbPlayer){ //Si assez de joueurs on lance la game
+        startGame = true;
+        document.getElementById('waiting').innerHTML = ``;
+        console.log("La partie peut commencer");
+        onCallGame();
+      } 
+      outputList(users);
+    })
+  }else{
     document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
     clearInterval(myVarForTimer);//Je clear l'interval pour éviter qu'il y ait 2 timers lorsqu'une réponse est correcte
     myVarForTimer = setInterval(myTimer, 1000);
@@ -304,7 +304,6 @@ const onGetImage = (data) => {
 
     document.getElementById("bottomDash").innerHTML = bottomDash;
 
-    onCheckAnswer(data);
     onCheckAnswer(data);
   }
 };
