@@ -148,11 +148,6 @@ function outputMessage(mess){
 const onGameSettings2 = (data) => {
   if (!data) return;
 
-  // show the userList
-  socket.on('userList' , ({users}) =>{
-    outputList(users,data.nbPlayer);//On récupère le nombre de joueurs
-  })
-
   let outputList = (users,nbPlayer) => {
     const userList = document.getElementById('users');
     console.log("liste users :",users);
@@ -165,10 +160,17 @@ const onGameSettings2 = (data) => {
       startGame = true;
       document.getElementById('waiting').innerHTML = ``;
       console.log("La partie peut commencer");
+      onCallGame();
     } 
     userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
   }
 
+  // show the userList
+  socket.on('userList' , ({users}) =>{
+    outputList(users,data.nbPlayer);//On récupère le nombre de joueurs
+  })
+
+  
   if(startGame){
     document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
     clearInterval(myVarForTimer);//Je clear l'interval pour éviter qu'il y ait 2 timers lorsqu'une réponse est correcte
@@ -199,10 +201,7 @@ const onGameSettings2 = (data) => {
     }else { //Sinon on continue
       onCallImage();
     }
-
-  } else { //Sinon on attend que plus de joueurs joignent
-    onCallGame();
-  }
+  } 
 };
 
 
