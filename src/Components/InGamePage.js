@@ -102,8 +102,6 @@ const InGamePage = () => {
 };
 
 
-
-
 const onSubmitMess = (e) =>{
   e.preventDefault()
   const message = e.target.elements.msg.value;
@@ -170,6 +168,9 @@ const onGameSettings2 = (data) => {
         onCallGame();
       } 
       outputList(users);
+    });
+    socket.on('randomImage', ({image}) =>{
+      console.log("Image id :",image.id);
     })
   }else{
     document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
@@ -199,7 +200,10 @@ const onGameSettings2 = (data) => {
       clearInterval(myVarForTimer);
       page.innerHTML = endGamePage;
     }else { //Sinon on continue
-      onCallImage();
+      socket.on('randomImage', ({image}) =>{
+        console.log("Image id :",image.id);
+        onGetImage2(image);
+      })
     }
   } 
 };
@@ -242,9 +246,11 @@ const onGetImage2 = (data) => {
   //Fonctionne mais ca serait mieux de gérer ça dans le backend(Mais c'est plus compliqué)
   if(imagesAlreadyDisplayed.includes(data.id)){
     console.log("Image déjà affichée :",data.wordToFind);
-    onCallImage();
-  }
-  else{
+    socket.on('randomImage', ({image}) =>{
+      console.log("Image id :",image.id);
+      onGetImage2(image);
+    })
+  }else{
     document.getElementById("image").innerHTML = `<img style="width:50%" id="displayedImage" src="${imagesToDisplay[data.id-1]}" alt="${data.id}">`;
     imagesAlreadyDisplayed.push(data.id);
     
@@ -399,7 +405,8 @@ const onCallGame = () => {
     .catch((err) => onError(err));
 }
 
-const onCallImage = () => {
+const onCallImage = (data) => {
+  /*onGetImage2(data);
   fetch("/api/images", {
     method: "GET",
     headers: {
@@ -413,7 +420,7 @@ const onCallImage = () => {
       return response.json();
     })
     .then((data) => onGetImage2(data))
-    .catch((err) => onError(err));
+    .catch((err) => onError(err));*/
 }
 
 export default InGamePage;
