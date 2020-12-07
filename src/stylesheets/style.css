@@ -66,6 +66,36 @@ h1{
 }
 
 /* InGamePage */
+.container-ingame{
+	width: 65%;
+	overflow: hidden;
+	background: rgb(49, 126, 126);
+	margin: 20px auto;
+	padding: 20px;
+	display: inline-block;
+  }
+.container-menu{
+	width: 15%;
+	height: 528px;
+	overflow: hidden;
+	background: rgb(230, 36, 36);
+	margin: 20px auto;
+	padding: 20px;
+	display: inline-block;
+}
+.container-chat{
+	width: 18%;
+	height: 528px;
+	overflow: hidden;
+	background: rgb(255, 250, 250);
+	margin: 20px auto;
+	padding: 20px;
+	display: inline-block;
+}
+
+
+
+
 #logo2{
   width: 50%;
   height: 50%;
@@ -244,4 +274,22 @@ h1{
 	.chat-sidebar {
 		display: none;
   }
+}
+
+div#menu {
+	float: left;
+	max-width: 1400px;
+	background: #fff;
+	margin: 30px auto;
+	overflow: hidden;
+	border-radius: 10px;
+	}
+
+div#menu-chat {
+	float: right;
+	max-width: 1400px;
+	background: #fff;
+	margin: 30px auto;
+	overflow: hidden;
+	border-radius: 10px;
 }

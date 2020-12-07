@@ -22,58 +22,41 @@ const { pseudo } = qs.parse(location.search, {
 });
 
 let chatRoomPage = `
-<div class="chat-container">
-  <header class="chat-header">
-    <h1><i class="fas fa-smile"></i> GuessIt</h1>
-    <a href="index.html" class="btn">Leave Room</a>
-  </header>
-  <main class="chat-main">
+<div class="container-menu">
     <div class="chat-sidebar">
-      <h3><i class="fas fa-comments"></i> Room Name:</h3>
-      <h2 id="room-name">JavaScript</h2>
-      <h3><i class="fas fa-users"></i> Users</h3>
-      <ul id="users"></ul>
+        <h3><i class="fas fa-comments"></i> Room Name:</h3>
+        <h2 id="room-name">JavaScript</h2>
+        <h3><i class="fas fa-users"></i> Users</h3>
+        <ul id="users"></ul>
     </div>
+</div>
+<div class="container-ingame">
     <div id="centerPage">
-    <div id="waiting"></div>
-    <div id="firstSquare">
-    <div id="secondSquare">
-      <div id="timer"></div>
-      <div id="round"></div>
-      <div id="image"></div>
-      <div id="bottomDash"></div>
-      <div id="state"></div>
-      <div id="answerForm"></div>
-    </div><!-- div id=secondSquare -->    
-  </div><!-- div id=firstSquare -->
-  </div><!-- div id=centerPage -->
+        <div id="waiting"></div>
+        <div id="hey"></div>
+        <div id="firstSquare">
+            <div id="secondSquare">
+                <div id="timer"></div>
+                <div id="round"></div>
+                <div id="image"></div>
+                <div id="bottomDash"></div>
+                <div id="state"></div>
+                <div id="answerForm"></div>
+            </div><!-- div id=secondSquare -->
+        </div><!-- div id=firstSquare -->
+    </div><!-- div id=centerPage -->
+    </main>
+    <div class="chat-form-container">
+        <form id="chat-form">
+            <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off" />
+            <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+        </form>
+    </div>
+</div>
+<div class="container-chat">
     <div class="chat-messages"></div>
-  </main>
-  <div class="chat-form-container">
-    <form id="chat-form">
-      <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off"/>
-      <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
-    </form>
-  </div>
-</div>`;
-
-
-let inGamePage = `
-<div id="centerPage">
-  <img id="logo2" src="${logo}" alt="logo GuessIt">
-  <h1>Guess It</h1>
-  <h4>Jeu multijoueur</h4>
-    <div id="firstSquare">
-      <div id="secondSquare">
-        <div id="timer"></div>
-        <div id="round"></div>
-        <div id="image"></div>
-        <div id="bottomDash"></div>
-        <div id="state"></div>
-        <div id="answerForm"></div>
-      </div><!-- div id=secondSquare -->    
-    </div><!-- div id=firstSquare -->
-</div><!-- div id=centerPage -->`;
+</div>
+`;
 
 let page = document.querySelector("#page");
 let actualRound = 1;
@@ -137,11 +120,8 @@ function outputMessage(mess) {
   div.innerHTML = `<p class="text">
   <span class="meta">${mess.username} : </span>
   ${mess.text}</p>`;
-
   document.querySelector('.chat-messages').appendChild(div);
 }
-
-
 
 
 
@@ -167,7 +147,7 @@ const onGameSettings2 = (data) => {
 
   // show the userList
   socket.on('userList', ({ users }) => {
-    outputList(users, data.nbPlayer);//On récupère le nombre de joueurs
+    outputList(users, data.nbPlayer); //On récupère le nombre de joueurs
   })
 
 
@@ -203,7 +183,6 @@ const onGameSettings2 = (data) => {
     }
   }
 };
-
 
 
 
