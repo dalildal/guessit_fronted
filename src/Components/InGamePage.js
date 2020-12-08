@@ -87,6 +87,7 @@ let startGame = false;
 let nbRound;
 let timer;
 let dataGame;
+let dataImage;
 
 const socket = io('http://localhost:3000');
 
@@ -142,6 +143,16 @@ function outputMessage(mess){
   document.querySelector('.chat-messages').appendChild(div);                
 }
 
+function outputGoodResponse(mess){
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.innerHTML = `<p class="text">
+  <span class="meta">${mess.username} : </span>
+  a trouvé la bonne réponse</p>`
+  
+  document.querySelector('.chat-messages').appendChild(div); 
+}
+
 let outputList = (users) => {
   const userList = document.getElementById('users');
   userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
@@ -150,6 +161,7 @@ let outputList = (users) => {
 //Gère la récupèration d'image
 socket.on('get-image', ({image}) => {
   console.log("Image id :",image.id);
+  dataImage = image;
   onGetImage2(image);
 });
 
@@ -165,10 +177,10 @@ socket.on('reset-timer', () => {
     document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`; 
     timer--;
     if(timer < 0){ //Si le timer est écoulé
-      onCallGame();
       actualRound++;
       console.log("Temps écoulé");
       clearInterval(myVarForTimer);
+      onGameStarted();
     }
   }
 });
@@ -199,32 +211,29 @@ socket.on('userList' , ({users}) =>{
      socket.emit('launch-game');
      document.getElementById('waiting').innerHTML = ``;
      console.log("La partie peut commencer");
-     onCallGame();
-   } 
+     onGameStarted();
+   }
    outputList(users);
  });
 
 const onGameSettings2 = (data) => {
   if (!data) return;
-    dataGame = data;
-
-  if(startGame){
-    document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
-
-    socket.emit('launch-timer');
-
-    document.getElementById("round").innerHTML = `<h1>Round : ${actualRound}/${dataGame.nbRound}</h1>`;
-
-
-    if(actualRound > dataGame.nbRound){ //Si la partie est finie
-      socket.emit('launch-endGame');
-    }else { //Sinon on continue
-      socket.emit('launch-image');
-    }
-  } 
+  dataGame = data;
 };
 
+const onGameStarted = () => {
+  document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
 
+  socket.emit('launch-timer');
+
+  document.getElementById("round").innerHTML = `<h1>Round : ${actualRound}/${dataGame.nbRound}</h1>`;
+
+  if(actualRound > dataGame.nbRound){ //Si la partie est finie
+    socket.emit('launch-endGame');
+  }else { //Sinon on continue
+    socket.emit('launch-image');
+  }
+}
 
 
 const onGameSettings = (data) => {
@@ -281,7 +290,6 @@ const onGetImage2 = (data) => {
 
     document.getElementById("bottomDash").innerHTML = bottomDash;
 
-    onCheckAnswer2(data);
 };
 
 //Récupère l'image à afficher via un appel API mis dans la const onCallImage()
@@ -320,25 +328,27 @@ const onGetImage = (data) => {
   }
 };
 
-const onCheckAnswer2 = (data) => {
-  //Partie Socket
-      //message From server
-      socket.on('message', msg => {
-        console.log("Message : ",msg);
-        if(msg.text === data.wordToFind && msg.username === pseudo){
-          console.log("Bonne réponse");
-          document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
-          console.log("Bien joué le mot était", data.wordToFind);
-          socket.emit('launch-round');
-          correctAnswers++;
-          setTimeout(onCallGame,1000); //Pour afficher pdt 1 sec qu'on a trouvé la bonne rep
-        } else if (msg.text !== data.wordToFind && msg.username === pseudo) {
-          console.log("Mauvaise réponse");
-          document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
-        }
-        outputMessage(msg); 
-      })
-}
+socket.on('message', msg => {
+  console.log("Message : ",msg);
+  //Si 
+  if(msg.text === dataImage.wordToFind && msg.username !== pseudo){
+    outputGoodResponse(msg);
+  } else if (msg.text !== dataImage.wordToFind && msg.username === pseudo) {
+    console.log("Mauvaise réponse");
+    document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
+    outputMessage(msg); 
+  }
+  else {
+    console.log("Bonne réponse");
+    document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
+    console.log("Bien joué le mot était", dataImage.wordToFind);
+    socket.emit('launch-round');
+    correctAnswers++;
+    setTimeout(onGameStarted,1000);//Pour afficher pdt 1 sec qu'on a trouvé la bonne rep
+    outputMessage(msg); 
+  }
+})
+
 
 
 const onCheckAnswer = (data) => {
