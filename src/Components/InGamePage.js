@@ -83,13 +83,16 @@ let imagesToDisplay = new Array(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13);
 let imagesAlreadyDisplayed = new Array();
 let correctAnswers = 0;
 let endGamePage;
-let isGameFinished = false;
 let startGame = false;
+let nbRound;
+let timer;
+let dataGame;
+let dataImage;
 
 const socket = io('http://localhost:3000');
 
 const InGamePage = () => {
-  
+
   page.innerHTML = chatRoomPage;
 
   let chatForm = document.getElementById('chat-form');
@@ -100,8 +103,6 @@ const InGamePage = () => {
   
 
 };
-
-
 
 
 const onSubmitMess = (e) =>{
@@ -142,69 +143,97 @@ function outputMessage(mess){
   document.querySelector('.chat-messages').appendChild(div);                
 }
 
+function outputGoodResponse(mess){
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.innerHTML = `<p class="text">
+  <span class="meta">${mess.username} : </span>
+  a trouvé la bonne réponse</p>`
+  
+  document.querySelector('.chat-messages').appendChild(div); 
+}
+
 let outputList = (users) => {
   const userList = document.getElementById('users');
   userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
 }
 
+//Gère la récupèration d'image
+socket.on('get-image', ({image}) => {
+  console.log("Image id :",image.id);
+  dataImage = image;
+  onGetImage2(image);
+});
 
+//Gère le timer
+socket.on('reset-timer', () => {
+  timer = dataGame.roundTime;
+  console.log("timer :",dataGame.roundTime);
+  clearInterval(myVarForTimer);//Je clear l'interval pour éviter qu'il y ait 2 timers lorsqu'une réponse est correcte
+  myVarForTimer = setInterval(myTimer, 1000);
 
+  document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`;//Je le mets avant la fonction pour qu'il soit mis dans l'html
+  function myTimer() { //Fonction pour actualiser le timer à chaque seconde
+    document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`; 
+    timer--;
+    if(timer < 0){ //Si le timer est écoulé
+      actualRound++;
+      console.log("Temps écoulé");
+      clearInterval(myVarForTimer);
+      onGameStarted();
+    }
+  }
+});
+
+//Gère l'incrémentation de round
+socket.on('increment-round', () => {
+  console.log("on augmente le round");
+  actualRound++;
+  document.getElementById("round").innerHTML = `<h1>Round : ${actualRound}/${dataGame.nbRound}</h1>`;
+});
+
+//Gère la fin de partie
+socket.on('end-game', () => {
+  onEndGame();
+  console.log("gameIsFinished");
+  clearInterval(myVarForTimer);
+  page.innerHTML = endGamePage;
+});
+
+//Gère la waiting room
+socket.on('userList' , ({users}) =>{
+   document.getElementById('waiting').innerHTML = `
+   <h1>En attente d'autres joueurs</h1>
+   <h1>${users.length}/${dataGame.nbPlayer}</h1>`;
+   //Si assez de joueurs on lance la game
+   if(users.length == dataGame.nbPlayer){
+     startGame = true;
+     socket.emit('launch-game');
+     document.getElementById('waiting').innerHTML = ``;
+     console.log("La partie peut commencer");
+     onGameStarted();
+   }
+   outputList(users);
+ });
 
 const onGameSettings2 = (data) => {
   if (!data) return;
-
-  // show the userList
-  //Gère la waiting room
-  if(!startGame){
-    socket.on('userList' , ({users}) =>{
-      console.log("liste users :",users);
-      console.log("nbr users :",users.length);
-      console.log("nbr players :",data.nbPlayer);
-      document.getElementById('waiting').innerHTML = `
-      <h1>En attente d'autres joueurs</h1>
-      <h1>${users.length}/${data.nbPlayer}</h1>`;
-      if(users.length == data.nbPlayer){ //Si assez de joueurs on lance la game
-        startGame = true;
-        document.getElementById('waiting').innerHTML = ``;
-        console.log("La partie peut commencer");
-        onCallGame();
-      } 
-      outputList(users);
-    })
-  }else{
-    document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
-    clearInterval(myVarForTimer);//Je clear l'interval pour éviter qu'il y ait 2 timers lorsqu'une réponse est correcte
-    myVarForTimer = setInterval(myTimer, 1000);
-
-    let nbRound = data.nbRound;
-    document.getElementById("round").innerHTML = `<h1>Round : ${actualRound}/${nbRound}</h1>`;
-
-    let timer = data.roundTime;
-    document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`;//Je le mets avant la fonction pour qu'il soit mis dans l'html
-    function myTimer() { //Fonction pour actualiser le timer à chaque seconde
-      document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`; 
-      timer--;
-      if(timer < 0){ //Si le timer est écoulé
-        onCallGame();
-        actualRound++;
-        console.log("Temps écoulé");
-        clearInterval(myVarForTimer);
-      }
-    }
-
-    if(actualRound > nbRound){ //Si la partie est finie
-      isGameFinished = true;
-      onEndGame(data.nbRound);
-      console.log("gameIsFinished");
-      clearInterval(myVarForTimer);
-      page.innerHTML = endGamePage;
-    }else { //Sinon on continue
-      onCallImage();
-    }
-  } 
+  dataGame = data;
 };
 
+const onGameStarted = () => {
+  document.getElementById("state").innerHTML = ``;//On remet l'état à "zéro"
 
+  socket.emit('launch-timer');
+
+  document.getElementById("round").innerHTML = `<h1>Round : ${actualRound}/${dataGame.nbRound}</h1>`;
+
+  if(actualRound > dataGame.nbRound){ //Si la partie est finie
+    socket.emit('launch-endGame');
+  }else { //Sinon on continue
+    socket.emit('launch-image');
+  }
+}
 
 
 const onGameSettings = (data) => {
@@ -238,15 +267,9 @@ const onGameSettings = (data) => {
 
 const onGetImage2 = (data) => {
   if (!data) return;
-  //Sert à savoir si une id a déjà été utilisée
-  //Fonctionne mais ca serait mieux de gérer ça dans le backend(Mais c'est plus compliqué)
-  if(imagesAlreadyDisplayed.includes(data.id)){
-    console.log("Image déjà affichée :",data.wordToFind);
-    onCallImage();
-  }
-  else{
+
     document.getElementById("image").innerHTML = `<img style="width:50%" id="displayedImage" src="${imagesToDisplay[data.id-1]}" alt="${data.id}">`;
-    imagesAlreadyDisplayed.push(data.id);
+    //imagesAlreadyDisplayed.push(data.id);
     
     //Gère le zoom et le dezoom de l'image
     //Serait mieux de gérer ça en dehors de la const onGetImage()
@@ -267,9 +290,6 @@ const onGetImage2 = (data) => {
 
     document.getElementById("bottomDash").innerHTML = bottomDash;
 
-    //onCheckAnswer(data);
-    onCheckAnswer2(data);
-  }
 };
 
 //Récupère l'image à afficher via un appel API mis dans la const onCallImage()
@@ -308,25 +328,27 @@ const onGetImage = (data) => {
   }
 };
 
-const onCheckAnswer2 = (data) => {
-  //Partie Socket
-      //message From server
-      socket.on('message', msg => {
-        console.log("Message : ",msg);
-        if(msg.text === data.wordToFind && msg.username === pseudo){
-          console.log("Bonne réponse");
-          document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
-          console.log("Bien joué le mot était", data.wordToFind);
-          actualRound++;
-          correctAnswers++;
-          setTimeout(onCallGame,1000); //Pour afficher pdt 1 sec qu'on a trouvé la bonne rep
-        } else if (msg.text !== data.wordToFind && msg.username === pseudo) {
-          console.log("Mauvaise réponse");
-          document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
-        }
-        outputMessage(msg); 
-      })
-}
+socket.on('message', msg => {
+  console.log("Message : ",msg);
+  //Si 
+  if(msg.text === dataImage.wordToFind && msg.username !== pseudo){
+    outputGoodResponse(msg);
+  } else if (msg.text !== dataImage.wordToFind && msg.username === pseudo) {
+    console.log("Mauvaise réponse");
+    document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
+    outputMessage(msg); 
+  }
+  else {
+    console.log("Bonne réponse");
+    document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
+    console.log("Bien joué le mot était", dataImage.wordToFind);
+    socket.emit('launch-round');
+    correctAnswers++;
+    setTimeout(onGameStarted,1000);//Pour afficher pdt 1 sec qu'on a trouvé la bonne rep
+    outputMessage(msg); 
+  }
+})
+
 
 
 const onCheckAnswer = (data) => {
@@ -361,8 +383,8 @@ const onCheckAnswer = (data) => {
   }
 }
 
-const onEndGame = (nbRound) => {
-  console.log(correctAnswers + "/" + nbRound);
+const onEndGame = () => {
+  console.log(correctAnswers + "/" + dataGame.nbRound);
   endGamePage = 
   `<div id="centerPage">
     <img id="logo2" src="${logo}" alt="logo GuessIt">
@@ -371,7 +393,7 @@ const onEndGame = (nbRound) => {
     <div id="firstSquare">
       <div id="secondSquare">
         <h1>Partie terminée</h1>
-        <h1>${correctAnswers}/${nbRound} réponses correctes </h1>
+        <h1>${correctAnswers}/${dataGame.nbRound} réponses correctes </h1>
       </div><!-- div id=secondSquare -->    
     </div><!-- div id=firstSquare -->
   </div><!-- div id=centerPage -->`;
@@ -399,7 +421,8 @@ const onCallGame = () => {
     .catch((err) => onError(err));
 }
 
-const onCallImage = () => {
+const onCallImage = (data) => {
+  /*onGetImage2(data);
   fetch("/api/images", {
     method: "GET",
     headers: {
@@ -413,7 +436,7 @@ const onCallImage = () => {
       return response.json();
     })
     .then((data) => onGetImage2(data))
-    .catch((err) => onError(err));
+    .catch((err) => onError(err));*/
 }
 
 export default InGamePage;
