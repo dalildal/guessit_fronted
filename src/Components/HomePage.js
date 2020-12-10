@@ -25,17 +25,11 @@ let homePage = `
         </form>
       </div>
       <div id="joinGameForm">
-        <form>
-          <input class="form-control" type="text" name="link" id="link" placeholder="Lien d'invitation"/>
-          <input class="buttonJoin" type="submit" value="Rejoindre partie" />
+        <form action="/inGame">
+          <input class="form-control" required type="text" name="pseudo" id="pseudo" placeholder="pseudo"/>
+          <input id="joinGameButton" class="buttonHP" type="submit" value="Rejoindre la partie" />
         </form>
       </div>
-      <div id="joinChatRoom">
-      <form action="/inGame">
-        <input class="form-control" required type="text" name="pseudo" id="pseudo" placeholder="pseudo"/>
-        <input class="buttonHP" type="submit" value="Join Chat Room" />
-      </form>
-    </div>
     </div>
   </div>
 </div>
@@ -50,8 +44,6 @@ const HomePage = async () => {
 
   let createGameForm = document.getElementById("createGameForm");
   createGameForm.addEventListener("submit", onCreateGame);
-  let joinGameForm = document.getElementById("joinGameForm");
-  joinGameForm.addEventListener("submit", onJoinGame);
 };
 
 const onCreateGame = (e) => {
@@ -59,10 +51,6 @@ const onCreateGame = (e) => {
   RedirectUrl("/createGame");
 }
 
-const onJoinGame = (e) => {
-  e.preventDefault();
-  RedirectUrl("/waitingRoom");
-}
 
 const animeHomePage = () => {
   /**
@@ -93,7 +81,7 @@ const animeHomePage = () => {
     }
   })
 
-  const buttonHP = document.querySelector('.buttonHP');
+  const buttonHP = document.getElementById('createGameForm');
   const mouseHoverAnimation = () => {
     anime({
       targets: buttonHP,
@@ -119,7 +107,7 @@ const animeHomePage = () => {
   buttonHP.addEventListener('mouseover', mouseHoverAnimation);
   buttonHP.addEventListener('mouseout', mouseOutAnimation);
 
-  const buttonJoin = document.querySelector('.buttonJoin');
+  const buttonJoin = document.getElementById('joinGameButton');
   const mouseOverAnimation = () => {
     anime({
       targets: buttonJoin,

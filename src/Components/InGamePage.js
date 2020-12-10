@@ -22,11 +22,18 @@ const { pseudo } = qs.parse(location.search, {
   ignoreQueryPrefix: true
 });
 
-let chatRoomPage = `
-<div class="logo-ingame">
-    <div class="container">
-        <div class="squares-ingame"></div>
-        <div class="squares-ingame"></div>
+let inGamePage = `
+<div class="chat-container">
+  <header class="chat-header">
+    <h1><i class="fas fa-smile"></i> GuessIt</h1>
+    <a href="index.html" class="btn">Leave Room</a>
+  </header>
+  <main class="chat-main">
+    <div class="chat-sidebar">
+      <h3><i class="fas fa-comments"></i> Room Name:</h3>
+      <h2 id="room-name">JavaScript</h2>
+      <h3><i class="fas fa-users"></i> Users</h3>
+      <ul id="users"></ul>
     </div>
     <div class="container">
         <div class="squares-ingame"></div>
@@ -66,25 +73,6 @@ let chatRoomPage = `
 </div>
 `;
 
-
-
-let inGamePage = `
-<div id="centerPage">
-  <img id="logo2" src="${logo}" alt="logo GuessIt">
-  <h1>Guess It</h1>
-  <h4>Jeu multijoueur</h4>
-    <div id="firstSquare">
-      <div id="secondSquare">
-        <div id="timer"></div>
-        <div id="round"></div>
-        <div id="image"></div>
-        <div id="bottomDash"></div>
-        <div id="state"></div>
-        <div id="answerForm"></div>
-      </div><!-- div id=secondSquare -->    
-    </div><!-- div id=firstSquare -->
-</div><!-- div id=centerPage -->`;
-
 let page = document.querySelector("#page");
 let imagesToDisplay = new Array(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13);
 let endGamePage;
@@ -99,14 +87,13 @@ const socket = io('http://localhost:3000');
 
 const InGamePage = () => {
 
-  page.innerHTML = chatRoomPage;
+  page.innerHTML = inGamePage;
 
   let chatForm = document.getElementById('chat-form');
   chatForm.addEventListener('submit', onSubmitMess);
 
-  //Appel APi pour récupérer les données de la partie
+  //Appel APi pour récupérer les données de la partie et lancer la WaitingRoom
   onCallGame();
-
 
 };
 
@@ -164,7 +151,7 @@ let outputList = (users) => {
 socket.on('get-image', ({ image }) => {
   console.log("Image à trouver :", image.wordToFind);
   dataImage = image;
-  onGetImage2(image);
+  onDisplayImage(image);
 });
 
 //Gère le timer
@@ -240,7 +227,7 @@ const onGameStarted = () => {
 }
 
 
-const onGetImage2 = (data) => {
+const onDisplayImage = (data) => {
   if (!data) return;
 
   document.getElementById("image").innerHTML = `<img style="width:50%" id="displayedImage" src="${imagesToDisplay[data.id - 1]}" alt="${data.id}">`;
@@ -266,19 +253,19 @@ const onGetImage2 = (data) => {
 
 };
 
-
+//Gère les messages et les bonnes réponses
 socket.on('message', msg => {
   console.log("Message : ", msg);
   //Si un autre user a trouvé la bonne rep
-  if (msg.text === dataImage.wordToFind && msg.username !== pseudo) {
+  if (typeof dataImage !== 'undefined' && msg.text === dataImage.wordToFind && msg.username !== pseudo) {
     outputGoodResponse(msg);
     //Si le user actuel a entré une mauvaise réponse
-  } else if (msg.text !== dataImage.wordToFind && msg.username === pseudo) {
+  } else if (typeof dataImage !== 'undefined' && msg.text !== dataImage.wordToFind && msg.username === pseudo) {
     console.log("Mauvaise réponse");
     document.getElementById("state").innerHTML = `<h1 style="color:red">Mauvaise réponse !</h1>`;
     outputMessage(msg);
     //Si le user actuel a trouvé la bonne réponse 
-  } else if (msg.text === dataImage.wordToFind && msg.username === pseudo) {
+  } else if (typeof dataImage !== 'undefined' && msg.text === dataImage.wordToFind && msg.username === pseudo) {
     console.log("Bonne réponse");
     document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
     //Increment le nbr de bonnes rep du user actuel
@@ -305,6 +292,8 @@ const onEndGame = (users) => {
         <h1>Partie terminée</h1>
         <h1>Classement : </h1>`
 
+  //Tri non fonctionnel
+  //users.sort((a, b) => a.correctAnswers - b.correctAnswers);
   //Permet d'afficher le classement final
   let i = 1;
   users.forEach(element => {
