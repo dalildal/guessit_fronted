@@ -23,33 +23,46 @@ const { pseudo } = qs.parse(location.search, {
 });
 
 let chatRoomPage = `
+<div class="logo-ingame">
+    <div class="container">
+        <div class="squares-ingame"></div>
+        <div class="squares-ingame"></div>
+    </div>
+    <div class="container">
+        <div class="squares-ingame"></div>
+        <div class="squares-ingame"></div>
+    </div>
+</div>
+
 <div class="container-game">
-  <div class="container-menu">
-          <h3><i class="fas fa-users"></i> Users</h3>
-          <ul id="users"></ul>
-  </div>
-  <div class="container-ingame">
-      <div id="centerPage">
-          <div id="waiting"></div>
-          <div id="hey"></div>
-                  <div id="timer"></div>
-                  <div id="round"></div>
-                  <div id="image"></div>
-                  <div id="bottomDash"></div>
-                  <div id="state"></div>
-                  <div id="answerForm"></div>
-      </div><!-- div id=centerPage -->
-      </main>
-      <div class="chat-form-container">
-          <form id="chat-form">
-              <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off" />
-              <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
-          </form>
-      </div>
-  </div>
-  <div class="container-chat">
-      <div class="chat-messages"></div>
-  </div>
+    <div class="container-menu">
+        <h2 id="users-title">USERS</h2>
+        <br>
+        <ul id="users"></ul>
+    </div>
+    <div class="container-ingame">
+        <div id="round"></div>
+        <div id="centerPage">
+            <div id="waiting"></div>
+            <div id="hey"></div>
+            <div id="image"></div>
+            <div id="bottomDash"></div>
+            <div id="state"></div>
+            <div id="answerForm"></div>
+        </div><!-- div id=centerPage -->
+        <div class="container-timer">
+            <h1 id="timer"></h1>
+        </div>
+    </div>
+    <div class="container-chat">
+        <div class="chat-messages"></div>
+        <div class="chat-form">
+            <form id="chat-form">
+                <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off" />
+                <!-- <button class="btn"><i class="fas fa-paper-plane"></i> Send</button> -->
+            </form>
+        </div>
+    </div>
 </div>
 `;
 
@@ -80,6 +93,7 @@ let myVarForTimer;
 let timer;
 let dataGame;
 let dataImage;
+let chatMessages = document.querySelector('.chat-message');
 
 const socket = io('http://localhost:3000');
 
@@ -160,9 +174,9 @@ socket.on('reset-timer', () => {
   clearInterval(myVarForTimer);//Je clear l'interval pour éviter qu'il y ait plusieurs timers lorsqu'une réponse est correcte
   myVarForTimer = setInterval(myTimer, 1000);
 
-  document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`;//Je le mets avant la fonction pour qu'il soit mis dans l'html
+  document.getElementById("timer").innerHTML = `<h1>TEMPS RESTANT : ${timer}</h1>`;//Je le mets avant la fonction pour qu'il soit mis dans l'html
   function myTimer() { //Fonction pour actualiser le timer à chaque seconde
-    document.getElementById("timer").innerHTML = `<h1>${timer}</h1>`;
+    document.getElementById("timer").innerHTML = `<h1>TEMPS RESTANT : ${timer}</h1>`;
     timer--;
     if (timer < 0) { //Si le timer est écoulé
       console.log("Temps écoulé");
@@ -176,7 +190,7 @@ socket.on('reset-timer', () => {
 socket.on('increment-round', () => {
   console.log("actualRound : ", actualRound);
   actualRound++;
-  document.getElementById("round").innerHTML = `<h1>Round : ${actualRound}/${dataGame.nbRound}</h1>`;
+  document.getElementById("round").innerHTML = `<h1>ROUND : ${actualRound}/${dataGame.nbRound}</h1>`;
   if (actualRound > dataGame.nbRound) { //Si la partie est finie
     socket.emit('launch-endGame');
   }
@@ -275,6 +289,7 @@ socket.on('message', msg => {
   } else {
     outputMessage(msg);
   }
+  chatMessages.scrollTop = chatMessages.scrollHeight
 })
 
 
