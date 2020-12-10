@@ -23,17 +23,10 @@ const { pseudo } = qs.parse(location.search, {
 });
 
 let inGamePage = `
-<div class="chat-container">
-  <header class="chat-header">
-    <h1><i class="fas fa-smile"></i> GuessIt</h1>
-    <a href="index.html" class="btn">Leave Room</a>
-  </header>
-  <main class="chat-main">
-    <div class="chat-sidebar">
-      <h3><i class="fas fa-comments"></i> Room Name:</h3>
-      <h2 id="room-name">JavaScript</h2>
-      <h3><i class="fas fa-users"></i> Users</h3>
-      <ul id="users"></ul>
+<div class="logo-ingame">
+    <div class="container">
+        <div class="squares-ingame"></div>
+        <div class="squares-ingame"></div>
     </div>
     <div class="container">
         <div class="squares-ingame"></div>
@@ -70,8 +63,7 @@ let inGamePage = `
             </form>
         </div>
     </div>
-</div>
-`;
+</div>`;
 
 let page = document.querySelector("#page");
 let imagesToDisplay = new Array(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13);
@@ -307,8 +299,6 @@ const onEndGame = (users) => {
     `</div><!-- div id=secondSquare -->    
     </div><!-- div id=firstSquare -->
   </div><!-- div id=centerPage -->`;
-
-
 
 }
 
