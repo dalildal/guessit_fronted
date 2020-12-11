@@ -12,6 +12,7 @@ let createGamePage = `
     <input required type="number" class="form-control" id="nbRound" name="nbRound" min="5" max="15" placeholder="5-15">
     <input class="buttonHP" type="submit" value="Créer une partie" />
   </form>
+  <div id="gameCreated"></div>
 </div>
 `;
 
@@ -53,7 +54,8 @@ const onCreateGame = (e) => {
 
 const onGameCreated = (data) => {
   console.log(data);
-  RedirectUrl("/waitingRoom");
+  document.getElementById("gameCreated").innerHTML = `<h1>Partie crée avec succès !</h1>`;
+  setTimeout(() => RedirectUrl('/'),1500);
 };
 
 const onError = (err) => {
