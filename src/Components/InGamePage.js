@@ -188,7 +188,11 @@ socket.on('end-game', (users) => {
 socket.on('userList', ({ users }) => {
   document.getElementById('waiting').innerHTML = `
    <h1>En attente d'autres joueurs</h1>
-   <h1>${users.length}/${dataGame.nbPlayer}</h1>`;
+   <h1>${users.length}/${dataGame.nbPlayer}</h1>
+   <h3>Nombre de round de la partie : ${dataGame.nbRound}</h3>
+   <h3>Temps pour chaque round : ${dataGame.roundTime} secondes</h3>
+   `;
+
   //Si assez de joueurs on lance la game
   if (users.length == dataGame.nbPlayer) {
     socket.emit('launch-game');
@@ -275,14 +279,26 @@ socket.on('message', msg => {
 const onEndGame = (users) => {
 
   endGamePage =
-    `<div id="centerPage">
-    <img id="logo2" src="${logo}" alt="logo GuessIt">
-    <h1>Guess It</h1>
-    <h4>Jeu multijoueur</h4>
-    <div id="firstSquare">
-      <div id="secondSquare">
-        <h1>Partie terminée</h1>
-        <h1>Classement : </h1>`
+    `
+    <div class="logo-ingame">
+    <div class="container">
+        <div class="squares-ingame"></div>
+        <div class="squares-ingame"></div>
+    </div>
+    <div class="container">
+        <div class="squares-ingame"></div>
+        <div class="squares-ingame"></div>
+    </div>
+</div>
+
+<div id="centerPage">
+  <h1>GUESS IT</h1>
+  <h4>Jeu multijoueur</h4>
+  <div class="container-endgame1">
+    <div class="container-endgame2">
+      <h1>Partie terminée</h1>
+      <h1>Classement : </h1>
+`
 
   //Tri non fonctionnel
   //users.sort((a, b) => a.correctAnswers - b.correctAnswers);

@@ -36,7 +36,7 @@ const CreateGamePage = () => {
       widht: '100%',
       scale: {
         delay: 100,
-        value: 1.15
+        value: 1.02
       },
       duration: 1500
     });
@@ -85,7 +85,7 @@ const onCreateGame = (e) => {
 const onGameCreated = (data) => {
   console.log(data);
   document.getElementById("gameCreated").innerHTML = `<h1>Partie crée avec succès !</h1>`;
-  setTimeout(() => RedirectUrl('/'),1500);
+  setTimeout(() => RedirectUrl('/'), 1500);
 };
 
 const onError = (err) => {
