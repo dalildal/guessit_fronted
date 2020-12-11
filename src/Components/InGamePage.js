@@ -189,6 +189,7 @@ socket.on('userList', ({ users }) => {
   document.getElementById('waiting').innerHTML = `
    <h1>En attente d'autres joueurs</h1>
    <h1>${users.length}/${dataGame.nbPlayer}</h1>
+   <br>
    <h3>Nombre de round de la partie : ${dataGame.nbRound}</h3>
    <h3>Temps pour chaque round : ${dataGame.roundTime} secondes</h3>
    `;
