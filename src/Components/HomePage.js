@@ -4,6 +4,7 @@ import anime from 'animejs/lib/anime.es.js';
 
 
 let homePage = `
+
 <div id="centerPage">
   <!-- <img id="logo" src="${logo}" alt="logo GuessIt"> -->
   <div class="container">
@@ -40,7 +41,7 @@ const HomePage = async () => {
   page.innerHTML = homePage;
 
   animeHomePage();
-  
+
   let createGameForm = document.getElementById("createGameForm");
   createGameForm.addEventListener("submit", onCreateGame);
 };
@@ -51,7 +52,7 @@ const onCreateGame = (e) => {
 }
 
 
-const animeHomePage = () =>{
+const animeHomePage = () => {
   /**
    *  Animation with AnimeJS
    */
@@ -63,10 +64,10 @@ const animeHomePage = () =>{
       easing: 'easeInOutSine'
     },
     scale: [
-      {value: .1, easing: 'easeOutSine', duration: 500},
-      {value: 1, easing: 'easeInOutQuad', duration: 750}
+      { value: .1, easing: 'easeOutSine', duration: 500 },
+      { value: 1, easing: 'easeInOutQuad', duration: 750 }
     ],
-    delay: anime.stagger(200, {grid: [10, 2], from: 'center'})
+    delay: anime.stagger(200, { grid: [10, 2], from: 'center' })
   });
   //document.querySelector('.squares').addEventListener('mouseover',() =>{squaresAnim.play();});
   document.querySelector('.squares').onclick = squaresAnim.restart;
@@ -81,7 +82,7 @@ const animeHomePage = () =>{
   })
 
   const buttonHP = document.getElementById('createGameForm');
-  const mouseHoverAnimation = () =>{
+  const mouseHoverAnimation = () => {
     anime({
       targets: buttonHP,
       widht: '100%',
@@ -92,7 +93,7 @@ const animeHomePage = () =>{
       duration: 1500
     });
   }
-  const mouseOutAnimation = () =>{
+  const mouseOutAnimation = () => {
     anime({
       targets: buttonHP,
       widht: '50%',
@@ -107,7 +108,7 @@ const animeHomePage = () =>{
   buttonHP.addEventListener('mouseout', mouseOutAnimation);
 
   const buttonJoin = document.getElementById('joinGameButton');
-  const mouseOverAnimation = () =>{
+  const mouseOverAnimation = () => {
     anime({
       targets: buttonJoin,
       widht: '100%',
@@ -118,7 +119,7 @@ const animeHomePage = () =>{
       duration: 1500
     });
   }
-  const mouseOverAnimationJoin = () =>{
+  const mouseOverAnimationJoin = () => {
     anime({
       targets: buttonJoin,
       widht: '50%',

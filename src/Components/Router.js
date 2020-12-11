@@ -35,7 +35,7 @@ const Router = () => {
       uri = e.target.dataset.uri;
     }
     if (uri) {
-     
+
       // use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
       window.history.pushState({}, uri, window.location.origin + uri);
       // render the requested component
@@ -66,11 +66,11 @@ const RedirectUrl = (uri, data) => {
   // therefore, those components have to be either a function or a class
   componentToRender = routes[uri];
   if (routes[uri]) {
-    if(!data)
+    if (!data)
       componentToRender();
     else
       componentToRender(data);
-    
+
   } else {
     ErrorPage(new Error("The " + uri + " ressource does not exist"));
   }

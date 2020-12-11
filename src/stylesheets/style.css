@@ -22,6 +22,7 @@ body {
   #secondPartHomePage{
 	margin-left: 2%;
 	margin-right: 2%;
+	margin-top: 7.5%;
   }
   .buttonHP{
 	  font-family: Comic Sans MS, Comic Sans, cursive	;
@@ -115,9 +116,9 @@ body {
   }
   
   .container-game{
-	  font-family: Comic Sans MS, Comic Sans, cursive	;
-	  margin: 2%;
-		background-color: rgb(73, 78, 78);
+	font-family: Comic Sans MS, Comic Sans, cursive	;
+	margin: 2%;
+	background-color: rgb(73, 78, 78);
   }
   
   li{
@@ -170,6 +171,23 @@ body {
 	  border: 0;
 	  font-size: 17px;
   }
+  /*Endgame*/
+  .container-endgame1{
+	font-family: Comic Sans MS, Comic Sans, cursive	;
+	margin: 1%;
+	background-color: rgb(73, 78, 78);
+  }
+  .container-endgame2{
+	  font-family: Comic Sans MS, Comic Sans, cursive	;
+	  width: 97.5%;
+	  height: 440px;
+	  overflow: hidden;
+	  background: #24c4af;
+	  margin: 11px;
+	  padding: 25px;
+	  display: inline-block;
+	  position: relative;
+	}
   
   /* Chat Page */
   

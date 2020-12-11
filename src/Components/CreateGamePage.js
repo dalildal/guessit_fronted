@@ -1,4 +1,6 @@
+//import * as io from 'socket.io-client';
 import { RedirectUrl } from "./Router.js";
+import anime from 'animejs/lib/anime.es.js';
 
 let createGamePage = `
 <div id="centerPage">
@@ -16,14 +18,42 @@ let createGamePage = `
 </div>
 `;
 
-
 const CreateGamePage = () => {
+
 
   let page = document.querySelector("#page");
   page.innerHTML = createGamePage;
   let gameForm = document.querySelector("form");
   gameForm.addEventListener("submit", onCreateGame);
+  /**
+   *  Animation with AnimeJS
+   */
 
+  const buttonHP = document.querySelector('.buttonHP');
+  const mouseHoverAnimation = () => {
+    anime({
+      targets: buttonHP,
+      widht: '100%',
+      scale: {
+        delay: 100,
+        value: 1.02
+      },
+      duration: 1500
+    });
+  }
+  const mouseOutAnimation = () => {
+    anime({
+      targets: buttonHP,
+      widht: '50%',
+      scale: {
+        delay: 100,
+        value: 1
+      },
+      duration: 1500
+    });
+  }
+  buttonHP.addEventListener('mouseover', mouseHoverAnimation);
+  buttonHP.addEventListener('mouseout', mouseOutAnimation);
 };
 
 const onCreateGame = (e) => {
@@ -55,13 +85,14 @@ const onCreateGame = (e) => {
 const onGameCreated = (data) => {
   console.log(data);
   document.getElementById("gameCreated").innerHTML = `<h1>Partie crée avec succès !</h1>`;
-  setTimeout(() => RedirectUrl('/'),1500);
+  setTimeout(() => RedirectUrl('/'), 1500);
 };
 
 const onError = (err) => {
   let errorMessage = err.message;
   RedirectUrl("/error", errorMessage);
 };
+
 
 
 export default CreateGamePage;
