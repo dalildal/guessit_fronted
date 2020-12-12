@@ -1,6 +1,5 @@
 
 import { RedirectUrl } from "./Router.js";
-import logo from "../images/guessItLogo.png";
 import * as io from 'socket.io-client';
 import * as qs from 'qs';
 import p1 from "../images/1.jpg";
@@ -230,15 +229,15 @@ const onDisplayImage = (data) => {
 
   //Gère le zoom et le dezoom de l'image
   //Serait mieux de gérer ça en dehors de la const onGetImage()
-  document.getElementById("displayedImage").addEventListener('mouseleave', () => {
-    document.getElementById("displayedImage").style.width = "50%";
-    console.log("Dezoom");
-  });
-  document.getElementById("displayedImage").addEventListener('mouseenter', () => {
-    document.getElementById("displayedImage").style.width = "70%";
-    console.log("Zoom");
-  });
-
+   document.getElementById("displayedImage").addEventListener('mouseleave', () => {
+     document.getElementById("displayedImage").style.width = "50%";
+     console.log("Dezoom");
+   });
+   document.getElementById("displayedImage").addEventListener('mouseenter', () => {
+     document.getElementById("displayedImage").style.width = "60%";
+     console.log("Zoom");
+   });
+ 
   let bottomDash = `<h1><span>`;
   for (let i = 0; i < data.wordToFind.length; i++) {
     bottomDash += ` _ `;
