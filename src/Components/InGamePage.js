@@ -72,7 +72,6 @@ let myVarForTimer;
 let timer;
 let dataGame;
 let dataImage;
-let chatMessages = document.querySelector('.chat-message');
 
 const socket = io('http://localhost:3000');
 
@@ -189,7 +188,7 @@ socket.on('userList', ({ users }) => {
    <h1>En attente d'autres joueurs</h1>
    <h1>${users.length}/${dataGame.nbPlayer}</h1>
    <br>
-   <h3>Nombre de round de la partie : ${dataGame.nbRound}</h3>
+   <h3>Nombre de rounds de la partie : ${dataGame.nbRound}</h3>
    <h3>Temps pour chaque round : ${dataGame.roundTime} secondes</h3>
    `;
 
@@ -251,6 +250,7 @@ const onDisplayImage = (data) => {
 
 //Gère les messages et les bonnes réponses
 socket.on('message', msg => {
+  let chatMessages = document.querySelector('.chat-messages');
   console.log("Message : ", msg);
   //Si un autre user a trouvé la bonne rep
   if (typeof dataImage !== 'undefined' && msg.text === dataImage.wordToFind && msg.username !== pseudo) {
@@ -272,7 +272,7 @@ socket.on('message', msg => {
   } else {
     outputMessage(msg);
   }
-  chatMessages.scrollTop = chatMessages.scrollHeight
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 })
 
 
