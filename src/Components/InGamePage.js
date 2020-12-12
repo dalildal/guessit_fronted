@@ -300,9 +300,10 @@ const onEndGame = (users) => {
       <h1>Partie terminée</h1>
       <h1>Classement : </h1>
 `
-
+  console.log("users non tries : ",users);
   //Tri non fonctionnel
-  //users.sort((a, b) => a.correctAnswers - b.correctAnswers);
+  users.sort((a, b) => b.correctAnswers - a.correctAnswers);
+  console.log("users tries : ",users);
   //Permet d'afficher le classement final
   let i = 1;
   users.forEach(element => {
