@@ -83,7 +83,20 @@ const InGamePage = () => {
   chatForm.addEventListener('submit', onSubmitMess);
 
   //Appel APi pour récupérer les données de la partie et lancer la WaitingRoom
-  onCallGame();
+  fetch("/api/games", {
+    method: "GET",
+    headers: {
+    },
+  })
+    .then((response) => {
+      if (!response.ok)
+        throw new Error(
+          "Error code : " + response.status + " : " + response.statusText
+        );
+      return response.json();
+    })
+    .then((data) => OnGameSettings(data))
+    .catch((err) => onError(err));
 
 };
 
@@ -173,15 +186,6 @@ socket.on('increment-round', () => {
   }
 });
 
-//Gère la fin de partie
-socket.on('end-game', (users) => {
-  onEndGame(users);
-  console.log("gameIsFinished");
-
-  clearInterval(myVarForTimer);
-  page.innerHTML = endGamePage;
-});
-
 //Gère la waiting room
 socket.on('userList', ({ users }) => {
   document.getElementById('waiting').innerHTML = `
@@ -204,7 +208,16 @@ socket.on('userList', ({ users }) => {
   outputList(users);
 });
 
-const onGameSettings2 = (data) => {
+//Gère la fin de partie
+socket.on('end-game', (users) => {
+  onEndGame(users);
+  console.log("gameIsFinished");
+
+  clearInterval(myVarForTimer);
+  page.innerHTML = endGamePage;
+});
+
+const OnGameSettings = (data) => {
   if (!data) return;
   dataGame = data;
 };
@@ -228,7 +241,6 @@ const onDisplayImage = (data) => {
   document.getElementById("image").innerHTML = `<img style="width:50%" id="displayedImage" src="${imagesToDisplay[data.id - 1]}" alt="${data.id}">`;
 
   //Gère le zoom et le dezoom de l'image
-  //Serait mieux de gérer ça en dehors de la const onGetImage()
    document.getElementById("displayedImage").addEventListener('mouseleave', () => {
      document.getElementById("displayedImage").style.width = "50%";
      console.log("Dezoom");
@@ -299,10 +311,8 @@ const onEndGame = (users) => {
       <h1>Partie terminée</h1>
       <h1>Classement : </h1>
 `
-  console.log("users non tries : ",users);
-  //Tri non fonctionnel
+  //Tri fonctionnel
   users.sort((a, b) => b.correctAnswers - a.correctAnswers);
-  console.log("users tries : ",users);
   //Permet d'afficher le classement final
   let i = 1;
   users.forEach(element => {
@@ -323,23 +333,5 @@ const onError = (err) => {
   let errorMessage = err.message;
   RedirectUrl("/error", errorMessage);
 };
-
-const onCallGame = () => {
-  fetch("/api/games", {
-    method: "GET",
-    headers: {
-    },
-  })
-    .then((response) => {
-      if (!response.ok)
-        throw new Error(
-          "Error code : " + response.status + " : " + response.statusText
-        );
-      return response.json();
-    })
-    .then((data) => onGameSettings2(data))
-    .catch((err) => onError(err));
-}
-
 
 export default InGamePage;

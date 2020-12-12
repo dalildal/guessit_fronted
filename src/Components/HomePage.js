@@ -1,12 +1,9 @@
-import logo from "../images/guessItLogo.png";
 import { RedirectUrl } from "./Router.js";
 import anime from 'animejs/lib/anime.es.js';
 
 
 let homePage = `
-
 <div id="centerPage">
-  <!-- <img id="logo" src="${logo}" alt="logo GuessIt"> -->
   <div class="container">
     <div class="squares"></div>
     <div class="squares"></div>
@@ -69,7 +66,6 @@ const animeHomePage = () => {
     ],
     delay: anime.stagger(200, { grid: [10, 2], from: 'center' })
   });
-  //document.querySelector('.squares').addEventListener('mouseover',() =>{squaresAnim.play();});
   document.querySelector('.squares').onclick = squaresAnim.restart;
 
   anime({
@@ -132,16 +128,6 @@ const animeHomePage = () => {
   }
   buttonJoin.addEventListener('mouseover', mouseOverAnimation);
   buttonJoin.addEventListener('mouseout', mouseOverAnimationJoin);
-  /*
-  let animeLogo = anime({
-    targets: document.getElementById('logo'),
-    rotate: '2turn',
-    duration: 800,
-    autoplay: false
-  });
-  document.getElementById('logo').addEventListener('mouseover', () => { animeLogo.play();})
-  */
-
 
   /**
    *  End of animation with AnimeJS

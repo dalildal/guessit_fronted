@@ -1,4 +1,3 @@
-//import * as io from 'socket.io-client';
 import { RedirectUrl } from "./Router.js";
 import anime from 'animejs/lib/anime.es.js';
 
@@ -55,6 +54,9 @@ const CreateGamePage = () => {
   buttonHP.addEventListener('mouseover', mouseHoverAnimation);
   buttonHP.addEventListener('mouseout', mouseOutAnimation);
 };
+  /**
+   *  End of animation with AnimeJS
+   */
 
 const onCreateGame = (e) => {
   e.preventDefault();
@@ -65,8 +67,8 @@ const onCreateGame = (e) => {
   };
 
   fetch("/api/games/", {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    body: JSON.stringify(game), // body data type must match "Content-Type" header
+    method: "POST",
+    body: JSON.stringify(game),
     headers: {
       "Content-Type": "application/json",
     },
