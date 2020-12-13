@@ -23,6 +23,12 @@ import p19 from "../images/19.jpg";
 import p20 from "../images/20.jpg";
 import p21 from "../images/21.jpg";
 import p22 from "../images/22.jpg";
+import p23 from "../images/23.jpg";
+import p24 from "../images/24.jpg";
+import p25 from "../images/25.jpg";
+import p26 from "../images/26.jpg";
+import p27 from "../images/27.jpg";
+
 
 //Récupère le pseudo dans l'url
 const { pseudo } = qs.parse(location.search, {
@@ -72,7 +78,7 @@ let inGamePage = `
 
 let page = document.querySelector("#page");
 //Liste qui contient tous les import des images à afficher
-let imagesToDisplay = new Array(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22);
+let imagesToDisplay = new Array(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27);
 let endGamePage;
 let actualRound;
 let myVarForTimer;
