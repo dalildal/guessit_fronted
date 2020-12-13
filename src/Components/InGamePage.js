@@ -15,6 +15,15 @@ import p10 from "../images/10.jpg";
 import p11 from "../images/11.jpg";
 import p12 from "../images/12.jpg";
 import p13 from "../images/13.jpg";
+import p14 from "../images/14.jpg";
+import p15 from "../images/15.jpg";
+import p16 from "../images/16.jpg";
+import p17 from "../images/17.jpg";
+import p18 from "../images/18.jpg";
+import p19 from "../images/19.jpg";
+import p20 from "../images/20.jpg";
+import p21 from "../images/21.jpg";
+import p22 from "../images/22.jpg";
 
 //récupère le pseudo dans l'url
 const { pseudo } = qs.parse(location.search, {
@@ -64,7 +73,7 @@ let inGamePage = `
 </div>`;
 
 let page = document.querySelector("#page");
-let imagesToDisplay = new Array(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13);
+let imagesToDisplay = new Array(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22);
 let endGamePage;
 let actualRound;
 let myVarForTimer;
