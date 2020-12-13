@@ -22,12 +22,13 @@ const CreateGamePage = () => {
 
   let page = document.querySelector("#page");
   page.innerHTML = createGamePage;
+  
   let gameForm = document.querySelector("form");
   gameForm.addEventListener("submit", onCreateGame);
+
   /**
    *  Animation with AnimeJS
    */
-
   const buttonHP = document.querySelector('.buttonHP');
   const mouseHoverAnimation = () => {
     anime({
@@ -65,7 +66,7 @@ const onCreateGame = (e) => {
     roundTime: document.getElementById("roundTime").value,
     nbRound: document.getElementById("nbRound").value,
   };
-
+  //Appel API pour poster la game
   fetch("/api/games/", {
     method: "POST",
     body: JSON.stringify(game),
@@ -80,13 +81,12 @@ const onCreateGame = (e) => {
         );
       return response.json();
     })
-    .then((data) => onGameCreated(data))
+    .then(() => onGameCreated())
     .catch((err) => onError(err));
 };
 
-const onGameCreated = (data) => {
-  console.log(data);
-  document.getElementById("gameCreated").innerHTML = `<h1>Partie crée avec succès !</h1>`;
+const onGameCreated = () => {
+  document.getElementById("gameCreated").innerHTML = `<h1>Partie créée avec succès !</h1>`;
   setTimeout(() => RedirectUrl('/'), 1500);
 };
 

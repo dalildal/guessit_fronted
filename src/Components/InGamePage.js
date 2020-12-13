@@ -1,4 +1,3 @@
-
 import { RedirectUrl } from "./Router.js";
 import * as io from 'socket.io-client';
 import * as qs from 'qs';
@@ -25,7 +24,7 @@ import p20 from "../images/20.jpg";
 import p21 from "../images/21.jpg";
 import p22 from "../images/22.jpg";
 
-//récupère le pseudo dans l'url
+//Récupère le pseudo dans l'url
 const { pseudo } = qs.parse(location.search, {
   ignoreQueryPrefix: true
 });
@@ -66,13 +65,13 @@ let inGamePage = `
         <div class="chat-form">
             <form id="chat-form">
                 <input id="msg" type="text" placeholder="Entrez le message" required autocomplete="off" />
-                <!-- <button class="btn"><i class="fas fa-paper-plane"></i> Send</button> -->
             </form>
         </div>
     </div>
 </div>`;
 
 let page = document.querySelector("#page");
+//Liste qui contient tous les import des images à afficher
 let imagesToDisplay = new Array(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22);
 let endGamePage;
 let actualRound;
@@ -108,7 +107,7 @@ const InGamePage = () => {
 
 };
 
-
+//Permet d'envoyer le message du client au serveur
 const onSubmitMess = (e) => {
   e.preventDefault()
   const message = e.target.elements.msg.value;
@@ -125,14 +124,14 @@ socket.emit('joinRoom', { pseudo });
 
 
 
-//socket client
+//Connecte le client
 socket.on('connect', () => { // Quand la connexion est établie
   console.log('Socket Client ID:' + socket.id); // 'G5p5...'
   console.log('Socket Connection Established');
   socket.emit(socket.id);
 });
 
-
+//Envoie les messages normaux à tous les joueurs
 function outputMessage(mess) {
   const div = document.createElement('div');
   div.classList.add('message');
@@ -143,6 +142,7 @@ function outputMessage(mess) {
   document.querySelector('.chat-messages').appendChild(div);
 }
 
+//Permet d'afficher aux autres joueurs quand le client actuel a trouvé la bonne rep
 function outputGoodResponse(mess) {
   const div = document.createElement('div');
   div.classList.add('message');
@@ -153,6 +153,7 @@ function outputGoodResponse(mess) {
   document.querySelector('.chat-messages').appendChild(div);
 }
 
+//Affiche la liste des joueurs
 let outputList = (users) => {
   const userList = document.getElementById('users');
   userList.innerHTML = `${users.map(user => `<li>${user.username}</li>`).join('')}`;
@@ -160,8 +161,9 @@ let outputList = (users) => {
 
 //Gère la récupèration d'image
 socket.on('get-image', ({ image }) => {
-  console.log("Image à trouver :", image.wordToFind);
+  //Récupère les données de l'image
   dataImage = image;
+  //On affiche ensuite l'image au client
   onDisplayImage(image);
 });
 
@@ -177,7 +179,7 @@ socket.on('reset-timer', () => {
     timer--;
     if (timer < 0) { //Si le timer est écoulé
       console.log("Temps écoulé");
-      //Crée un msg pour dire que le personne n'a trouvé la bonne rep
+      //Crée un msg pour dire que personne n'a trouvé la bonne rep
       let messTempsEcoule = {
         username:"",
         text: "Personne n'a trouvé la bonne réponse"
@@ -192,7 +194,6 @@ socket.on('reset-timer', () => {
 
 //Gère l'incrémentation de round et l'actualisation du round
 socket.on('increment-round', () => {
-  console.log("actualRound : ", actualRound);
   actualRound++;
   document.getElementById("round").innerHTML = `<h1>ROUND : ${actualRound}/${dataGame.nbRound}</h1>`;
   if (actualRound > dataGame.nbRound) { //Si la partie est finie
@@ -202,6 +203,7 @@ socket.on('increment-round', () => {
 
 //Gère la waiting room
 socket.on('userList', ({ users }) => {
+  //Affiche le nb de joueurs qui doivent rejoindre et les params de la partie
   document.getElementById('waiting').innerHTML = `
    <h1>En attente d'autres joueurs</h1>
    <h1>${users.length}/${dataGame.nbPlayer}</h1>
@@ -213,6 +215,7 @@ socket.on('userList', ({ users }) => {
   //Si assez de joueurs on lance la game
   if (users.length == dataGame.nbPlayer) {
     socket.emit('launch-game');
+    //On réinitialise la partie html de la waiting room
     document.getElementById('waiting').innerHTML = ``;
     console.log("La partie peut commencer");
     //On actualise actualRound comme ça pour que le résultat soit tjrs =1
@@ -231,6 +234,7 @@ socket.on('end-game', (users) => {
   page.innerHTML = endGamePage;
 });
 
+//Permet au client de récupérer les données de la partie via un appel API
 const OnGameSettings = (data) => {
   if (!data) return;
   dataGame = data;
@@ -252,18 +256,20 @@ const onGameStarted = () => {
 const onDisplayImage = (data) => {
   if (!data) return;
 
+  //Affiche l'image au client
   document.getElementById("image").innerHTML = `<img style="width:50%" id="displayedImage" src="${imagesToDisplay[data.id - 1]}" alt="${data.id}">`;
 
   //Gère le zoom et le dezoom de l'image
-   document.getElementById("displayedImage").addEventListener('mouseleave', () => {
-     document.getElementById("displayedImage").style.width = "50%";
-     console.log("Dezoom");
-   });
-   document.getElementById("displayedImage").addEventListener('mouseenter', () => {
-     document.getElementById("displayedImage").style.width = "60%";
-     console.log("Zoom");
-   });
- 
+  document.getElementById("displayedImage").addEventListener('mouseleave', () => {
+    document.getElementById("displayedImage").style.width = "50%";
+    console.log("Dezoom");
+  });
+  document.getElementById("displayedImage").addEventListener('mouseenter', () => {
+    document.getElementById("displayedImage").style.width = "60%";
+    console.log("Zoom");
+  });
+  
+  //Ajoute les tirets du bas
   let bottomDash = `<h1><span>`;
   for (let i = 0; i < data.wordToFind.length; i++) {
     bottomDash += ` _ `;
@@ -277,7 +283,6 @@ const onDisplayImage = (data) => {
 //Gère les messages et les bonnes réponses
 socket.on('message', msg => {
   let chatMessages = document.querySelector('.chat-messages');
-  console.log("Message : ", msg);
   //Si un autre user a trouvé la bonne rep
   if (typeof dataImage !== 'undefined' && msg.text === dataImage.wordToFind && msg.username !== pseudo) {
     outputGoodResponse(msg);
@@ -292,16 +297,17 @@ socket.on('message', msg => {
     document.getElementById("state").innerHTML = `<h1 style="color:green">Bonne réponse !</h1>`;
     //Increment le nbr de bonnes rep du user actuel
     socket.emit('launch-goodAnswer', socket.id);
-    setTimeout(onGameStarted, 1000);//Pour afficher pdt 1 sec qu'on a trouvé la bonne rep
+    setTimeout(onGameStarted, 1000);//Pour afficher pdt 1 sec qu'on a trouvé la bonne rep puis on relance un round
     outputMessage(msg);
     //Si personne n'a trouvé la bonne reponse
   } else {
     outputMessage(msg);
   }
+  //Permet laisser les derniers messages vers le bas
   chatMessages.scrollTop = chatMessages.scrollHeight;
 })
 
-
+//Classement final du jeu
 const onEndGame = (users) => {
 
   endGamePage =
