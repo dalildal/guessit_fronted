@@ -35,7 +35,7 @@ let inGamePage = `
 
 <div class="container-game">
     <div class="container-menu">
-        <h2 id="users-title">USERS</h2>
+        <h2 id="users-title">JOUEURS</h2>
         <br>
         <ul id="users"></ul>
     </div>
@@ -43,7 +43,6 @@ let inGamePage = `
         <div id="round"></div>
         <div id="centerPage">
             <div id="waiting"></div>
-            <div id="hey"></div>
             <div id="image"></div>
             <div id="bottomDash"></div>
             <div id="state"></div>
@@ -57,7 +56,7 @@ let inGamePage = `
         <div class="chat-messages"></div>
         <div class="chat-form">
             <form id="chat-form">
-                <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off" />
+                <input id="msg" type="text" placeholder="Entrez le message" required autocomplete="off" />
                 <!-- <button class="btn"><i class="fas fa-paper-plane"></i> Send</button> -->
             </form>
         </div>
@@ -160,7 +159,6 @@ socket.on('get-image', ({ image }) => {
 //Gère le timer
 socket.on('reset-timer', () => {
   timer = dataGame.roundTime;
-  console.log("timer :", dataGame.roundTime);
   clearInterval(myVarForTimer);//Je clear l'interval pour éviter qu'il y ait plusieurs timers lorsqu'une réponse est correcte
   myVarForTimer = setInterval(myTimer, 1000);
 
@@ -170,6 +168,13 @@ socket.on('reset-timer', () => {
     timer--;
     if (timer < 0) { //Si le timer est écoulé
       console.log("Temps écoulé");
+      //Crée un msg pour dire que le personne n'a trouvé la bonne rep
+      let messTempsEcoule = {
+        username:"",
+        text: "Personne n'a trouvé la bonne réponse"
+      }
+      //Dit au serveur qu'il doit mettre dans le chat le messTempsEcoule
+      socket.emit('elapse-time', messTempsEcoule);
       clearInterval(myVarForTimer);
       onGameStarted();
     }
